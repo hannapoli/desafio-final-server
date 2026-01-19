@@ -1,0 +1,17 @@
+node_modules
+
+.env
+
+.DS_Store       # Mac
+Thumbs.db       # Windows
+desktop.ini     # Windows
+*.swp           # Linux/Mac swap files
+*.swo
+
+.vscode/
+*.code-workspace
+
+*.tmp
+*.temp
+*.bak
+*.old
