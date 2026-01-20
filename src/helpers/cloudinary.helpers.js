@@ -22,7 +22,10 @@ const uploadOneFileCloudinaryHelper = (buffer, originalname) => { // Buffer (es 
     },
     (error, result) => {
         if (error) return reject(error);
-        return resolve(result.secure_url); //URL para guardar en la bbdd
+        return resolve({
+            url: result.secure_url, // URL para guardar en la bbdd
+            public_id: result.public_id // Public id para luego manejar (eliminar)
+        }); 
     });
     
     //Enviar buffer
@@ -52,7 +55,10 @@ const uploadFilesCloudinaryHelper = async (files) => {
             }, 
             (error, result) => { 
                 if (error) return reject(error); 
-                return resolve(result.secure_url); 
+                return resolve({
+                    url: result.secure_url, // URL para guardar en la bbdd
+                    public_id: result.public_id // Public id para luego manejar (eliminar)
+                }) 
             }); 
 
             //Enviar buffer
@@ -66,8 +72,53 @@ const uploadFilesCloudinaryHelper = async (files) => {
 
 };
 
+const deleteOneFileCloudinaryHelper = async (publicId) => {
+
+    return new Promise ((resolve, reject) => {
+        cloudinary.uploader.destroy(publicId,
+            (error, result) => {
+                if(error) return reject(error);
+
+                return resolve({ 
+                    ok: true, 
+                    msg: "Archivo eliminado correctamente", 
+                    data: publicId
+                });
+            }
+        )
+    })
+}
+
+const deteleFilesCloudinaryHelper = async (publicIds) => {
+
+    let results = [];
+
+    for (const id of publicIds) {
+        const result = await new Promise((resolve, reject) => {
+            cloudinary.uploader.destroy(id,
+                (error, result) => {
+                   if (error) return reject(error); 
+
+                   return resolve({
+                    ok: true,
+                    msg: "Archivos eliminados correctamente",
+                    data: id
+                   }); 
+                }
+            )
+        })
+
+        results.push(result)
+    }
+
+    return results;
+
+}
+
 // EXPORTACIONES
 module.exports = {
     uploadOneFileCloudinaryHelper,
-    uploadFilesCloudinaryHelper
+    uploadFilesCloudinaryHelper,
+    deleteOneFileCloudinaryHelper,
+    deteleFilesCloudinaryHelper
 }
