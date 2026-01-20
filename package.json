@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/hannapoli/desafio-final-server#readme",
   "dependencies": {
+    "cloudinary": "^2.9.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "ejs": "^4.0.1",
