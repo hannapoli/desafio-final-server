@@ -1,0 +1,27 @@
+const express = require("express");
+const router = express.Router();
+
+const {getAllParcelsController, getParcelByIDController, createReportsController, deleteReportsByIDController, getAllReportsController, getReportByIDController, updateReportsByIDController} = require("../controllers/producer.controller");
+const {check} = require("express-validator");
+const{validateInputs}= require("../middlewares/validate.input.middleware");
+const{verifyTokenMiddleware}= require("../middlewares/verify.token.middleware");
+const{getFullUserDataMiddleware}= require("../middlewares/user.data.middleware");
+const {validateRole} = require("../middlewares/roles.middleware")
+
+//DASHBOARD
+router.get('/dashboard/:id',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], getAllParcelsController)
+
+router.get('/parcel/:id',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], getParcelByIDController)
+
+//REPORTES
+router.get('/reports/getAll/:email',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], getAllReportsController)
+
+router.get('/reports/getByID/:idReport',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], getReportByIDController)
+
+router.post('/reports/create/:email',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], createReportsController )
+
+router.put('/report/update/:idProductor',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], updateReportsByIDController)
+
+router.delete('/report/delete/:idProductor',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], deleteReportsByIDController)
+
+module.exports = router;
