@@ -48,9 +48,62 @@ const getReportByIDModel = async (id) => {
     }
 }
 
+const deleteReportsByIDModel = async (id) => {
+    let result
+    try {
+        result = await pool.query(producerQueries.deleteReportsByID, [id])
+        console.log(result.rows, "COLUMNAS")
+        return result.rows[0];
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
+
+
+const getAllMessagesModel = async (email) => {
+    let result
+    try {
+        result = await pool.query(producerQueries.getAllMessages, [email])
+        console.log(result.rows, "COLUMNAS")
+        return result.rows;
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
+
+const getMessageByIDModel = async (id) => {
+    let result
+    try {
+        result = await pool.query(producerQueries.getMessageByID, [id])
+        console.log(result.rows, "COLUMNAS")
+        return result.rows[0];
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
+
+const deleteMessagesByIDModel = async (id) => {
+    let result
+    try {
+        result = await pool.query(producerQueries.deleteMessagesByID, [id])
+        console.log(result.rows, "COLUMNAS")
+        return result.rows[0];
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
+
 module.exports= {
     getAllParcelsModel,
     getParcelByIDModel,
     getAllReportsModel,
-    getReportByIDModel
+    getReportByIDModel,
+    deleteReportsByIDModel,
+    getAllMessagesModel,
+    getMessageByIDModel,
+    deleteMessagesByIDModel
 }
