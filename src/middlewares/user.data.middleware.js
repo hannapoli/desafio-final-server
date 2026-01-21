@@ -24,7 +24,6 @@ const getFullUserDataMiddleware = async (req, res, next) => {
         
         req.user = {
             ...req.user,
-            // email_user 
             name_user: user.name_user,
             role: userRole 
         };
