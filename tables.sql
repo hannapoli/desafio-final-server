@@ -84,7 +84,8 @@ CREATE TABLE reports (
     attached TEXT[],
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
+ALTER TABLE reports
+ADD COLUMN is_draft BOOLEAN NOT NULL DEFAULT TRUE;
 
 ---
 SELECT * FROM roles;
@@ -93,12 +94,34 @@ SELECT * FROM users;
 SELECT * FROM parcels;
 
 -- Datos de prueba para parcelas:
-INSERT INTO parcels (uid_parcel, uid_producer, name_parcel, product_parcel, coordinates_parcel)
-VALUES
-(
+-- INSERT INTO parcels (uid_parcel, uid_producer, name_parcel, product_parcel, coordinates_parcel)
+-- VALUES
+-- (
+--     'parcel001',
+--     '0ZodTLyMMaQ49pecJsthqPzfdh03',
+--     'Parcela A',
+--     'Maíz',
+--     'POLYGON((-72.60537242850114 -37.220596252953385,-72.60537242850114 -37.216194509829975,-72.59459209415944 -37.216194509829975,-72.59459209415944 -37.220596252953385,-72.60537242850114 -37.220596252953385))'
+-- );
+
+
+INSERT INTO parcels (
+    uid_parcel,
+    uid_producer,
+    name_parcel,
+    product_parcel,
+    coordinates_parcel
+)
+VALUES (
     'parcel001',
     '0ZodTLyMMaQ49pecJsthqPzfdh03',
     'Parcela A',
     'Maíz',
-    'POLYGON((-72.60537242850114 -37.220596252953385,-72.60537242850114 -37.216194509829975,-72.59459209415944 -37.216194509829975,-72.59459209415944 -37.220596252953385,-72.60537242850114 -37.220596252953385))'
+    '[
+        [-37.220596252953385, -72.60537242850114],
+        [-37.216194509829975, -72.60537242850114],
+        [-37.216194509829975, -72.59459209415944],
+        [-37.220596252953385, -72.59459209415944],
+        [-37.220596252953385, -72.60537242850114]
+    ]'
 );
