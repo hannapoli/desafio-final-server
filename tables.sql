@@ -30,6 +30,8 @@ CREATE TABLE users (
     email_user VARCHAR(255) UNIQUE NOT NULL,
     uid_rol UUID NOT NULL REFERENCES roles(uid_rol)
 );
+ALTER TABLE users
+ADD COLUMN photo_url TEXT NOT NULL DEFAULT 'https://res.cloudinary.com/dbi5thf23/image/upload/v1769005926/timothy-oldfield-luufnHoChRU-unsplash_l1tliv.jpg';
 
 INSERT INTO users (firebase_uid_user, name_user, email_user, uid_rol) VALUES
 (

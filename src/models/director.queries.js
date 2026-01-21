@@ -4,7 +4,7 @@ const directorQueries = {
         WHERE dp.uid_director = $1 
         ORDER BY p.name_parcel;`,
     getParcelByID: `SELECT * FROM parcels WHERE uid_parcel = $1`,
-    getAllReports: `SELECT * FROM reports WHERE email_receiver = $1`,
+    getAllReports: `SELECT * FROM reports WHERE $1 = ANY(email_receiver);`,
     getReportByID: `SELECT * FROM reports WHERE uid_report = $1`,
 }
 
