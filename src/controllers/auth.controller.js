@@ -19,10 +19,7 @@ const registerUserController = async (req, res) => {
         }
         
         //Añadimos el usuario a la base de datos PostgreSQL
-
-        //recibir role_id de role
-        const roleId = 1; //temporalmente para pruebas
-        const newUser = await addUserModel(uid, email, name, roleId);
+        const newUser = await addUserModel(uid, email, name, role);
         return res.status(201).json({
             ok: true,
             message: 'Usuario registrado correctamente.',

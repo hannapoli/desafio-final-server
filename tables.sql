@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS reports;
+DROP TABLE IF EXISTS messages;
+DROP TABLE IF EXISTS parcels;
+DROP TABLE IF EXISTS director_producer;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS roles;
+
+DROP EXTENSION IF EXISTS "uuid-ossp";
+
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE roles (
@@ -5,12 +15,13 @@ CREATE TABLE roles (
     rol_type VARCHAR(50) NOT NULL UNIQUE
 );
 
-INSERT INTO roles (rol_type) VALUES
-('productor'),
-('distribuidor'),
-('asesor'),
-('analista'),
-('director');
+INSERT INTO roles (uid_rol, rol_type) VALUES
+('9717e4fb-c034-46e9-9350-9375f797a384', 'productor'),
+('d9ac3cf9-80a5-46b0-b7f3-fc9e9ef05768', 'distribuidor'),
+('f4409e7e-ec44-4f3b-86a6-a3692a81a7e1', 'asesor'),
+('f868c9f0-be0b-4817-bbd2-aa8775e527d8', 'analista'),
+('fe95e061-f046-46cb-9253-5ede9be81a12', 'director');
+
 ---
 
 CREATE TABLE users (
@@ -19,6 +30,27 @@ CREATE TABLE users (
     email_user VARCHAR(255) UNIQUE NOT NULL,
     uid_rol UUID NOT NULL REFERENCES roles(uid_rol)
 );
+
+INSERT INTO users (firebase_uid_user, name_user, email_user, uid_rol) VALUES
+(
+    '0ZodTLyMMaQ49pecJsthqPzfdh03',
+    'Olga',
+    'olga@tb.com',
+    '9717e4fb-c034-46e9-9350-9375f797a384'
+),
+(
+    'dfDPwARjdLPqcA2JJExcPaDVNNo2',
+    'Holly',
+    'holly@tb.com',
+    'd9ac3cf9-80a5-46b0-b7f3-fc9e9ef05768'
+),
+(
+    '2hUFVMeqnFPNLh0YHfqxVQqN11l2',
+    'Alina',
+    'alina@tb.com',
+    'fe95e061-f046-46cb-9253-5ede9be81a12'
+);
+
 ---
 
 CREATE TABLE director_producer (
@@ -45,7 +77,7 @@ CREATE TABLE messages (
 );
 ---
 CREATE TABLE reports (
-	uid_report UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    uid_report UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email_creator VARCHAR(255) NOT NULL REFERENCES users(email_user),
     email_receiver TEXT[] NOT NULL,
     content_message TEXT,
@@ -70,4 +102,3 @@ VALUES
     'Maíz',
     'POLYGON((-72.60537242850114 -37.220596252953385,-72.60537242850114 -37.216194509829975,-72.59459209415944 -37.216194509829975,-72.59459209415944 -37.220596252953385,-72.60537242850114 -37.220596252953385))'
 );
-
