@@ -49,6 +49,8 @@ app.use('/api/v1/messages', require('./routes/messages.routes')); //Ruta para el
 app.use('/api/v1/analyst', require('./routes/analyst.routes')); //Ruta para el panel de analyst
 app.use('/api/v1/consultant', require('./routes/consultant.routes')); //Ruta para el panel de analyst
 
+app.use('/api/v1', require('./routes/cloudinary.routes'));
+
 // =============================== Iniciar el servidor ===============================
 app.listen(port, () => {
     console.log(`Servidor activo en el puerto ${port}​`);
