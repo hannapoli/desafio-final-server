@@ -1,10 +1,10 @@
 const pool = require('../configs/dbConnect');
-const {directorQueries} = require("./director.queries");
+const {messageQueries} = require("./messages.queries");
 
-const getAllParcelsModel = async (id) => {
+const getAllMessagesModel = async (email) => {
     let result
     try {
-        result = await pool.query(directorQueries.getAllParcels, [id])
+        result = await pool.query(messageQueries.getAllMessages, [email])
         console.log(result.rows, "COLUMNAS")
         return result.rows;
     } catch (error) {
@@ -13,10 +13,10 @@ const getAllParcelsModel = async (id) => {
     }
 }
 
-const getParcelByIDModel = async (id) => {
+const getMessageByIDModel = async (id) => {
     let result
     try {
-        result = await pool.query(directorQueries.getParcelByID, [id])
+        result = await pool.query(messageQueries.getMessageByID, [id])
         console.log(result.rows, "COLUMNAS")
         return result.rows[0];
     } catch (error) {
@@ -25,22 +25,22 @@ const getParcelByIDModel = async (id) => {
     }
 }
 
-const getAllReportsModel = async (email) => {
+const deleteMessagesByIDModel = async (id) => {
     let result
     try {
-        result = await pool.query(directorQueries.getAllReports, [email])
+        result = await pool.query(messageQueries.deleteMessagesByID, [id])
         console.log(result.rows, "COLUMNAS")
-        return result.rows;
+        return result.rows[0];
     } catch (error) {
         console.log(error, "<===========================>")
         return error;
     }
 }
 
-const getReportByIDModel = async (id) => {
+const createMessagesModel = async (emailCreator, emailReceiver, contentMessage) => {
     let result;
     try {
-        result = await pool.query( directorQueries.getReportByID, [id]);
+        result = await pool.query( messageQueries.createMessage, [emailCreator, emailReceiver, contentMessage]);
         console.log(result.rows, "COLUMNAS");
         return result.rows[0];
     } catch (error) {
@@ -50,8 +50,8 @@ const getReportByIDModel = async (id) => {
 };
 
 module.exports= {
-    getAllParcelsModel,
-    getParcelByIDModel,
-    getAllReportsModel,
-    getReportByIDModel
+    getAllMessagesModel,
+    getMessageByIDModel,
+    deleteMessagesByIDModel,
+    createMessagesModel
 }

@@ -44,6 +44,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', require('./routes/auth.routes'));
 
 app.use('/api/v1/producer', require('./routes/producer.routes')); //Ruta para el panel de producer
+app.use('/api/v1/messages', require('./routes/messages.routes')); //Ruta para el panel de producer
 
 // =============================== Iniciar el servidor ===============================
 app.listen(port, () => {
