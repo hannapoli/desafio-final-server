@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const http = require("http");
+const { initSocket } = require("./socket");
 // const swaggerUi = require('swagger-ui-express');
 // const swaggerSpec = require('./configs/swagger');
 require('dotenv').config();
@@ -43,7 +45,29 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/auth', require('./routes/auth.routes'));
 
+app.use('/api/v1/producer', require('./routes/producer.routes')); //Ruta para el panel de producer
+app.use('/api/v1/director', require('./routes/director.routes')); //Ruta para el panel de director
+app.use('/api/v1/messages', require('./routes/messages.routes')); //Ruta para el panel de mensaje
+app.use('/api/v1/analyst', require('./routes/analyst.routes')); //Ruta para el panel de analyst
+app.use('/api/v1/consultant', require('./routes/consultant.routes')); //Ruta para el panel de analyst
+
+app.use('/api/v1', require('./routes/cloudinary.routes'));
+
 // =============================== Iniciar el servidor ===============================
-app.listen(port, () => {
-    console.log(`Servidor activo en el puerto ${port}​`);
+// app.listen(port, () => {
+//     console.log(`Servidor activo en el puerto ${port}​`);
+// });
+
+const server = http.createServer(app);
+
+/* ===== SOCKET.IO ===== */
+initSocket(server, {
+  origin: whitelist,
+  methods: ["GET", "POST"],
+  credentials: true
+});
+
+/* ===== LISTEN ===== */
+server.listen(port, () => {
+  console.log(`HTTP + Socket.IO en puerto ${port}`);
 });
