@@ -1,5 +1,5 @@
 const { getAllMessagesModel, getMessageByIDModel, deleteMessagesByIDModel, createMessagesModel} = require("../models/messages.models")
-
+const { getIO, connectedUsers } = require("../socket");
 
 const getAllMessagesController =async (req, res) => {
     const email = req.params.email
@@ -42,7 +42,12 @@ const createMessagesController = async (req, res) => {
 
     try {
         const newMessage = await createMessagesModel( email, email_receiver, content_message );
-
+        
+        const socketId = connectedUsers.get(email_receiver);
+        if (socketId) {
+            getIO().to(socketId).emit("new-message", newMessage);
+        }
+        
         return res.status(201).json({
             ok: true,
             msg: "Mensaje creado correctamente",
