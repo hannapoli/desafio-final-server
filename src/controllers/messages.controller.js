@@ -1,4 +1,4 @@
-const { getAllMessagesModel, getMessageByIDModel, deleteMessagesByIDModel, createMessagesModel} = require("../models/messages.models")
+const { getAllMessagesModel, getMessageByIDModel, deleteMessagesByIDModel, createMessagesModel, findUserByEmailModel, deleteAllMessagesModel} = require("../models/messages.models")
 const { getIO, connectedUsers } = require("../socket");
 
 const getAllMessagesController =async (req, res) => {
@@ -41,6 +41,13 @@ const createMessagesController = async (req, res) => {
     const { email_receiver, content_message } = req.body;
 
     try {
+        const existe = await findUserByEmailModel(email_receiver);
+        if(!existe){
+            return res.status(401).json({
+                ok:false,
+                msg: "NO existe ese usuario"
+            })
+        }
         const newMessage = await createMessagesModel( email, email_receiver, content_message );
         
         const socketId = connectedUsers.get(email_receiver);
@@ -88,10 +95,36 @@ const deleteMessagesByIDController = async (req, res) => {
     }
 }
 
+const deleteAllMessagesController = async (req, res) => {
+    const email = req.params.email;
+    try {
+        const deletedReports = await deleteAllMessagesModel(email)
+        if (deletedReports) {
+            return res.status(200).json({
+                ok: true,
+                msg: "mensaje borrado",
+                deletedReports
+            })
+        } else {
+            return res.status(404).json({
+                ok: false,
+                msg: "ERROR 404, mensaje no encontrado",
+            })
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg: 'Error, contacte con el administrador',
+        })
+    }
+}
+
 
 module.exports = {
     getAllMessagesController,
     getMessageByIDController,
     createMessagesController,
-    deleteMessagesByIDController
+    deleteMessagesByIDController,
+    deleteAllMessagesController
 }

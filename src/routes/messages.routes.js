@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const {getAllMessagesController, getMessageByIDController, createMessagesController, deleteMessagesByIDController} = require("../controllers/messages.controller");
+const {getAllMessagesController, getMessageByIDController, createMessagesController, deleteMessagesByIDController, deleteAllMessagesController} = require("../controllers/messages.controller");
 const {check} = require("express-validator");
 const{validateInputMiddleware}= require("../middlewares/validate.input.middleware");
 const{verifyTokenMiddleware}= require("../middlewares/verify.token.middleware");
@@ -24,6 +24,8 @@ router.post('/create/:email',[verifyTokenMiddleware, getFullUserDataMiddleware, 
     ], createMessagesController)
 
 router.delete('/delete/:idMesage',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor","director","analista","asesor","distribuidor"])], deleteMessagesByIDController)
+
+router.delete('/deleteAll/:email',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor","director","analista","asesor","distribuidor"])], deleteAllMessagesController)
 
 
 module.exports = router;
