@@ -2,58 +2,70 @@ const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByI
 
 
 const getAllParcelsController = async (req, res) => {
-    const id = req.params.id
+    const userUid = req.user.uid;
+    
     try {
-        const data = await getAllParcelsModel(id)
+        const data = await getAllParcelsModel(userUid);
         console.log("<================ Parcelas: ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
             data
-        })
+        });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(500).json({
             ok: false,
-            msg: "TODO MAL, CONTACTA CON EL ADMIN"
-        })
+            msg: "Error del servidor, contacta con el administrador"
+        });
     }
 }
 
 const getParcelByIDController = async (req, res) => {
-    const id = req.params.id
+    const parcelId = req.params.id;
+    const userUid = req.user.uid;
+    
     try {
-        const data = await getParcelByIDModel(id)
+        const data = await getParcelByIDModel(parcelId);
+        
+        if (!data || data.uid_producer !== userUid) {
+            return res.status(403).json({
+                ok: false,
+                msg: "No tienes permiso para acceder a esta parcela"
+            });
+        }
+        
         console.log("<================ Parcelas: ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
             data
-        })
+        });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(500).json({
             ok: false,
-            msg: "TODO MAL, CONTACTA CON EL ADMIN"
-        })
+            msg: "Error del servidor, contacta con el administrador"
+        });
     }
 }
 
 const getAllReportsController = async (req, res) => {
-    const email = req.params.email
+    const userEmail = req.user.email;
+    
     try {
-        const data = await getAllReportsModel(email)
-        console.log("<================ Parcelas: ================>", data)
+        const data = await getAllReportsModel(userEmail);
+        console.log("<================ Reportes: ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
             data
-        })
+        });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(500).json({
             ok: false,
-            msg: "TODO MAL, CONTACTA CON EL ADMIN"
+            msg: "Error del servidor, contacta con el administrador"
         })
     }
 }
@@ -72,7 +84,7 @@ const getReportByIDController = async (req, res) => {
         console.log(error)
         return res.status(500).json({
             ok: false,
-            msg: "TODO MAL, CONTACTA CON EL ADMIN"
+            msg: "Error del servidor, contacta con el administrador"
         })
     }
 }

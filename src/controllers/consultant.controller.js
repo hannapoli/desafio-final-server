@@ -2,9 +2,11 @@ const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByI
 
 
 const getAllParcelsController = async (req, res) => {
-    const email = req.params.email
+    const producerEmail = req.params.email;
+    
     try {
-        const data = await getAllParcelsModel(email)
+        // Asesor ve las parcelas de un productor específico
+        const data = await getAllParcelsModel(producerEmail);
         console.log("<================ Parcelas: ================>", data)
         return res.status(200).json({
             ok: true,
@@ -15,15 +17,16 @@ const getAllParcelsController = async (req, res) => {
         console.log(error)
         return res.status(500).json({
             ok: false,
-            msg: "TODO MAL, CONTACTA CON EL ADMIN"
+            msg: "Error del servidor, contacta con el administrador"
         })
     }
 }
 
 const getParcelByIDController = async (req, res) => {
-    const id = req.params.id
+    const parcelId = req.params.id;
+    
     try {
-        const data = await getParcelByIDModel(id)
+        const data = await getParcelByIDModel(parcelId);
         console.log("<================ Parcelas: ================>", data)
         return res.status(200).json({
             ok: true,
@@ -34,16 +37,18 @@ const getParcelByIDController = async (req, res) => {
         console.log(error)
         return res.status(500).json({
             ok: false,
-            msg: "TODO MAL, CONTACTA CON EL ADMIN"
+            msg: "Error del servidor, contacta con el administrador"
         })
     }
 }
 
 const getAllReportsController = async (req, res) => {
-    const email = req.params.email
+    const producerEmail = req.params.email;
+    
     try {
-        const data = await getAllReportsModel(email)
-        console.log("<================ Parcelas: ================>", data)
+        // Asesor ve los reportes de un productor específico
+        const data = await getAllReportsModel(producerEmail);
+        console.log("<================ Reportes: ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
@@ -53,7 +58,7 @@ const getAllReportsController = async (req, res) => {
         console.log(error)
         return res.status(500).json({
             ok: false,
-            msg: "TODO MAL, CONTACTA CON EL ADMIN"
+            msg: "Error del servidor, contacta con el administrador"
         })
     }
 }
@@ -62,7 +67,7 @@ const getReportByIDController = async (req, res) => {
     const idReport = req.params.idReport
     try {
         const data = await getReportByIDModel(idReport)
-        console.log("<================ Parcelas: ================>", data)
+        console.log("<================ Reportes: ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
@@ -72,7 +77,7 @@ const getReportByIDController = async (req, res) => {
         console.log(error)
         return res.status(500).json({
             ok: false,
-            msg: "TODO MAL, CONTACTA CON EL ADMIN"
+            msg: "Error del servidor, contacta con el administrador"
         })
     }
 }
