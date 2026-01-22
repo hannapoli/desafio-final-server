@@ -1,10 +1,28 @@
-const { getAllMessagesModel, getMessageByIDModel, deleteMessagesByIDModel, createMessagesModel, findUserByEmailModel, deleteAllMessagesModel} = require("../models/messages.models")
+const { getAllMessagesModel, getMessageByIDModel, deleteMessagesByIDModel, createMessagesModel, findUserByEmailModel, deleteAllMessagesModel, getChatsModel} = require("../models/messages.models")
 const { getIO, connectedUsers } = require("../socket");
 
-const getAllMessagesController =async (req, res) => {
+const getChatsController =async (req, res) => {
     const email = req.params.email
     try {
-        const data = await getAllMessagesModel(email)
+        const data = await getChatsModel(email)
+        return res.status(200).json({
+            ok: true,
+            msg: "TODO OK",
+            data
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg: "TODO MAL, CONTACTA CON EL ADMIN"
+        })
+    }
+}
+const getAllMessagesController =async (req, res) => {
+    const email_creator = req.params.email_creator
+    const email_receiver = req.params.email_receiver
+    try {
+        const data = await getAllMessagesModel(email_creator,email_receiver)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
@@ -37,8 +55,9 @@ const getMessageByIDController =async (req, res) => {
     }
 }
 const createMessagesController = async (req, res) => {
-    const email = req.params.email;
-    const { email_receiver, content_message } = req.body;
+    const email_creator = req.params.email_creator
+    const email_receiver = req.params.email_receiver
+    const { content_message } = req.body;
 
     try {
         const existe = await findUserByEmailModel(email_receiver);
@@ -48,7 +67,7 @@ const createMessagesController = async (req, res) => {
                 msg: "NO existe ese usuario"
             })
         }
-        const newMessage = await createMessagesModel( email, email_receiver, content_message );
+        const newMessage = await createMessagesModel( email_creator, email_receiver, content_message );
         
         const socketId = connectedUsers.get(email_receiver);
         if (socketId) {
@@ -126,5 +145,6 @@ module.exports = {
     getMessageByIDController,
     createMessagesController,
     deleteMessagesByIDController,
-    deleteAllMessagesController
+    deleteAllMessagesController,
+    getChatsController
 }

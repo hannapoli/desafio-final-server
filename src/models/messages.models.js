@@ -1,10 +1,22 @@
 const pool = require('../configs/dbConnect');
 const {messageQueries} = require("./messages.queries");
 
-const getAllMessagesModel = async (email) => {
+const getChatsModel = async (email) => {
     let result
     try {
-        result = await pool.query(messageQueries.getAllMessages, [email])
+        result = await pool.query(messageQueries.getChats, [email])
+        console.log(result.rows, "COLUMNAS")
+        return result.rows;
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
+
+const getAllMessagesModel = async (email_creator,email_receiver) => {
+    let result
+    try {
+        result = await pool.query(messageQueries.getAllMessages, [email_creator,email_receiver])
         console.log(result.rows, "COLUMNAS")
         return result.rows;
     } catch (error) {
@@ -79,5 +91,6 @@ module.exports= {
     deleteMessagesByIDModel,
     createMessagesModel,
     deleteAllMessagesModel,
-    findUserByEmailModel
+    findUserByEmailModel,
+    getChatsModel
 }
