@@ -9,8 +9,8 @@ const uploadOneFileCloudinaryHelper = (buffer, originalname) => { // Buffer (es 
     const nameFile = originalname.toLowerCase();
 
     //Detectar si es imagen o vídeo según la extensión
-    const isImage = nameFile.endsWith('.jpg') || nameFile.endsWith('.jpeg') || nameFile.endsWith('.png') || nameFile.endsWith('.webp');
-    const isVideo = nameFile.endsWith('.mp4') || nameFile.endsWith('.mov') || nameFile.endsWith('.avi') || nameFile.endsWith('.webm');
+    const isImage = nameFile.endsWith('.jpg') || nameFile.endsWith('.jpeg') || nameFile.endsWith('.png') || nameFile.endsWith('.webp') || nameFile.endsWith('.insp');
+    const isVideo = nameFile.endsWith('.mp4') || nameFile.endsWith('.mov') || nameFile.endsWith('.avi') || nameFile.endsWith('.webm')  || nameFile.endsWith('.insv');
 
     //Elegir carpeta correcta en función de la extensión
     const folder = isVideo ? 'agrosync_video_360' : isImage ? 'agrosync_image_360' : 'agrosync_raw';

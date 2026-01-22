@@ -18,7 +18,7 @@ router.get('/reports/getAll/:email',[verifyTokenMiddleware, getFullUserDataMiddl
 
 router.get('/reports/getByID/:idReport',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], getReportByIDController)
 
-router.post('/reports/create/:email',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], createReportsController )
+router.post('/reports/create/:email/:idParcel',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], createReportsController )
 
 router.put('/reports/update/:idProductor',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], updateReportsByIDController)
 

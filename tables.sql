@@ -88,6 +88,8 @@ CREATE TABLE reports (
 );
 ALTER TABLE reports
 ADD COLUMN is_draft BOOLEAN NOT NULL DEFAULT TRUE;
+ALTER TABLE reports
+ADD COLUMN uid_parcel VARCHAR(255) REFERENCES parcels(uid_parcel);
 
 ---
 SELECT * FROM roles;

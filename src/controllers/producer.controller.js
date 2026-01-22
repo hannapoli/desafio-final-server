@@ -78,6 +78,44 @@ const getReportByIDController = async (req, res) => {
 }
 
 const createReportsController = async (req, res) => {
+    const email = req.params.email;
+    const idParcel = req.params.idParcel;
+    const { email_creator, email_receiver, content_message } = req.body;
+    
+    try {
+        // Verificar que el email del creador coincide con el usuario autenticado
+        if (email_creator !== email) {
+            return res.status(403).json({
+                ok: false,
+                msg: "No autorizado para crear reportes con este email"
+            });
+        }
+
+        // El archivo adjunto está en req.file
+        const attached = req.file ? req.file.path : null;
+
+        const newReport = await createReportModel(
+            email_creator,
+            email_receiver,
+            content_message,
+            attached,
+            idParcel
+        );
+
+        // console.log("<================ Reporte creado: ================>", newReport);
+        
+        return res.status(201).json({
+            ok: true,
+            msg: "Reporte creado.",
+            data: newReport
+        });
+    } catch (error) {
+        console.error("Error en createReportsController:", error);
+        return res.status(500).json({
+            ok: false,
+            msg: "Error al crear el reporte, contacta con el administrador"
+        });
+    }
 }
 
 const updateReportsByIDController = async (req, res) => {
