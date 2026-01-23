@@ -22,7 +22,7 @@ router.get('/reports/getByID/:idReport', [verifyTokenMiddleware, getFullUserData
 
 router.post('/reports/create/:email/:idParcel', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"]), validateUserEmail, upload.single("attached")], createReportsController)
 
-router.put('/reports/update/:idProductor', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], updateReportsByIDController)
+router.put('/reports/update/:idReport', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"]), upload.single("attached")], updateReportsByIDController)
 
 router.delete('/reports/delete/:idReport', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], deleteReportsByIDController)
 

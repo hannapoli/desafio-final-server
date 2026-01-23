@@ -1,4 +1,4 @@
-const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel, deleteReportsByIDModel, createReportModel } = require("../models/producer.model");
+const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel, deleteReportsByIDModel, createReportModel, updateReportModel } = require("../models/producer.model");
 const { uploadOneFileCloudinaryHelper } = require("../helpers/cloudinary.helpers");
 
 
@@ -139,7 +139,45 @@ const createReportsController = async (req, res) => {
 }
 
 const updateReportsByIDController = async (req, res) => {
-
+    const idReport = req.params.idReport;
+    const { email_receiver, content_message } = req.body;
+    
+    try {
+        let attached = null;
+        if (req.file) {
+            const uploadResult = await uploadOneFileCloudinaryHelper(
+                req.file.buffer,
+                req.file.originalname
+            );
+            attached = uploadResult.url;
+        }
+        
+        const updatedReport = await updateReportModel(
+            email_receiver,
+            content_message,
+            attached,
+            idReport
+        );
+        
+        if (updatedReport) {
+            return res.status(200).json({
+                ok: true,
+                msg: "Reporte actualizado correctamente",
+                data: updatedReport
+            });
+        } else {
+            return res.status(404).json({
+                ok: false,
+                msg: "Reporte no encontrado"
+            });
+        }
+    } catch (error) {
+        console.error("Error en updateReportsByIDController:", error);
+        return res.status(500).json({
+            ok: false,
+            msg: "Error al actualizar el reporte, contacta con el administrador"
+        });
+    }
 }
 const deleteReportsByIDController = async (req, res) => {
     const id = req.params.idReport

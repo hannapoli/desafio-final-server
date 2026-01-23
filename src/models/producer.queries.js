@@ -8,6 +8,12 @@ const producerQueries = {
         VALUES ($1, $2, $3, $4, $5, FALSE)
         RETURNING *
     `,
+    updateReport: `
+        UPDATE reports 
+        SET email_receiver = $1, content_message = $2, attached = $3
+        WHERE uid_report = $4
+        RETURNING *
+    `,
     deleteReportsByID:`DELETE FROM reports WHERE uid_report = $1 RETURNING *;`
 }
 
