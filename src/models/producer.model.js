@@ -60,11 +60,34 @@ const deleteReportsByIDModel = async (id) => {
     }
 }
 
+const createReportModel = async (email_creator, email_receiver, content_message, attached, uid_parcel) => {
+    try {
+        // email_receiver debe ser un array, attached también
+        const emaiReceiverArray = Array.isArray(email_receiver) ? email_receiver : [email_receiver];
+        const attachedArray = attached ? [attached] : [];
+        
+        const result = await pool.query(producerQueries.createReport, [
+            email_creator,
+            emaiReceiverArray,
+            content_message,
+            attachedArray,
+            uid_parcel
+        ]);
+        
+        console.log(result.rows[0], "REPORTE CREADO");
+        return result.rows[0];
+    } catch (error) {
+        console.error("Error en createReportModel:", error);
+        throw error;
+    }
+};
+
 
 module.exports= {
     getAllParcelsModel,
     getParcelByIDModel,
     getAllReportsModel,
     getReportByIDModel,
-    deleteReportsByIDModel
+    deleteReportsByIDModel,
+    createReportModel
 }

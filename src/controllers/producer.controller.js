@@ -1,4 +1,5 @@
-const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel, deleteReportsByIDModel} = require("../models/producer.model")
+const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel, deleteReportsByIDModel, createReportModel } = require("../models/producer.model");
+const { uploadOneFileCloudinaryHelper } = require("../helpers/cloudinary.helpers");
 
 
 const getAllParcelsController = async (req, res) => {
@@ -103,8 +104,15 @@ const createReportsController = async (req, res) => {
             });
         }
 
-        // El archivo adjunto está en req.file
-        const attached = req.file ? req.file.path : null;
+        let attached = null;
+        if (req.file) {
+            const uploadResult = await uploadOneFileCloudinaryHelper(
+                req.file.buffer,
+                req.file.originalname
+            );
+            // Cloudinary URL
+            attached = uploadResult.url;
+        }
 
         const newReport = await createReportModel(
             email_creator,
@@ -118,7 +126,7 @@ const createReportsController = async (req, res) => {
         
         return res.status(201).json({
             ok: true,
-            msg: "Reporte creado.",
+            msg: "El reporte está creado.",
             data: newReport
         });
     } catch (error) {

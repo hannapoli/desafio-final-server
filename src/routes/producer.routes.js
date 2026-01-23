@@ -8,6 +8,7 @@ const { verifyTokenMiddleware } = require("../middlewares/verify.token.middlewar
 const { getFullUserDataMiddleware } = require("../middlewares/user.data.middleware");
 const { validateRole } = require("../middlewares/roles.middleware");
 const { validateUserUid, validateUserEmail } = require("../middlewares/validate.access.middleware");
+const upload = require("../middlewares/upload");
 
 //DASHBOARD
 router.get('/dashboard/:id', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"]), validateUserUid], getAllParcelsController)
@@ -19,7 +20,7 @@ router.get('/reports/getAll/:email', [verifyTokenMiddleware, getFullUserDataMidd
 
 router.get('/reports/getByID/:idReport', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], getReportByIDController)
 
-router.post('/reports/create/:email/:idParcel',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], createReportsController )
+router.post('/reports/create/:email/:idParcel', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"]), validateUserEmail, upload.single("attached")], createReportsController)
 
 router.put('/reports/update/:idProductor', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], updateReportsByIDController)
 
