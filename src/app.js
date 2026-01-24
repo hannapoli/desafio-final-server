@@ -9,9 +9,9 @@ require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-// const frontendUrl = `${process.env.FRONT_URL}`;
+const frontendUrl = `${process.env.FRONT_URL}`;
 const frontendLocalHost = `${process.env.FRONT_LOCALHOST}`;
-const whitelist = [frontendLocalHost];
+const whitelist = [frontendLocalHost, frontendUrl];
 const corsOptions = {
     origin: (origin, callback) => {
         if (whitelist.includes(origin) || !origin) {

@@ -45,13 +45,7 @@ const getAllReportsController = async (req, res) => {
     
     try {
         const data = await getAllReportsModel(userEmail);
-        if (!data || data.email_receiver !== userEmail) {
-            return res.status(403).json({
-                ok: false,
-                msg: "No tienes permiso para acceder a este reporte"
-            });
-        }
-        console.log("<================ Parcelas: ================>", data)
+        console.log("<================ Reportes: ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
@@ -71,13 +65,13 @@ const getReportByIDController = async (req, res) => {
     const userEmail = req.user.email;
     try {
         const data = await getReportByIDModel(idReport);
-        if (!data || data.email_receiver !== userEmail) {
+        if (!data || !Array.isArray(data.email_receiver) || !data.email_receiver.includes(userEmail)) {
             return res.status(403).json({
                 ok: false,
                 msg: "No tienes permiso para acceder a este reporte"
             });
         }
-        console.log("<================ Parcelas: ================>", data)
+        console.log("<================ Reportes: ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
