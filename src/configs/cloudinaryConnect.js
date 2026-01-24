@@ -1,6 +1,6 @@
 // IMPORTACIONES DE TERCEROS
 require('dotenv').config();
-const { v2: cloudinary } = require('cloudinary');
+const cloudinary = require("cloudinary").v2;
 
 // CONFIGURACIÓN CLOUDINARY
 cloudinary.config({
@@ -11,4 +11,4 @@ cloudinary.config({
 });
 
 // EXPORTACIONES
-module.exports =  cloudinary
+module.exports =  cloudinary;

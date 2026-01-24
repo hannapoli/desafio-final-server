@@ -47,11 +47,12 @@ app.use('/api/v1/auth', require('./routes/auth.routes'));
 
 app.use('/api/v1/producer', require('./routes/producer.routes')); //Ruta para el panel de producer
 app.use('/api/v1/director', require('./routes/director.routes')); //Ruta para el panel de director
-app.use('/api/v1/messages', require('./routes/messages.routes')); //Ruta para el panel de mensaje
 app.use('/api/v1/analyst', require('./routes/analyst.routes')); //Ruta para el panel de analyst
 app.use('/api/v1/consultant', require('./routes/consultant.routes')); //Ruta para el panel de analyst
 
 app.use('/api/v1', require('./routes/cloudinary.routes'));
+
+app.use('/api/v1/messages', require('./routes/messages.routes')); //Ruta para el panel de mensaje
 
 // =============================== Iniciar el servidor ===============================
 // app.listen(port, () => {
@@ -71,3 +72,4 @@ initSocket(server, {
 server.listen(port, () => {
   console.log(`HTTP + Socket.IO en puerto ${port}`);
 });
+
