@@ -2,6 +2,24 @@
 const cloudinary = require("../configs/cloudinaryConnect");
 
 // HELPERS
+
+//Pasa los archivos al formato de un array plano de URLs
+const normalizeAttachedArray = (attached) => {
+    if (!attached || attached.length === 0) return [];
+    return Array.isArray(attached[0]) ? attached.flat() : attached;
+};
+
+//Extraer IDs públicos de Cloudinary para eliminar los archivos
+const extractPublicIds = (fileUrls) => {
+    return fileUrls.map(fileUrl => {
+        const urlParts = fileUrl.split('/');
+        const fileWithExtension = urlParts[urlParts.length - 1];
+        const folder = urlParts[urlParts.length - 2];
+        const fileName = fileWithExtension.split('.')[0];
+        return `${folder}/${fileName}`;
+    });
+};
+
 const uploadOneFileCloudinaryHelper = (buffer, originalname) => { // Buffer (es necesario al no usar memoryStorage y originalname con multer
     
     return new Promise((resolve, reject) => {
@@ -69,7 +87,13 @@ const uploadFilesCloudinaryHelper = async (files) => {
     } 
 
     return urlFiles
+};
 
+//Subir los archivos a Cloudinary y devolver un array de URLs
+const uploadFilesToCloudinary = async (files) => {
+    if (!files || files.length === 0) return null;
+    const uploadResults = await uploadFilesCloudinaryHelper(files);
+    return uploadResults.map(result => result.url);
 };
 
 const deleteOneFileCloudinaryHelper = async (publicId) => {
@@ -117,8 +141,10 @@ const deteleFilesCloudinaryHelper = async (publicIds) => {
 
 // EXPORTACIONES
 module.exports = {
+    normalizeAttachedArray,
     uploadOneFileCloudinaryHelper,
-    uploadFilesCloudinaryHelper,
+    uploadFilesToCloudinary,
     deleteOneFileCloudinaryHelper,
+    extractPublicIds,
     deteleFilesCloudinaryHelper
 }

@@ -60,17 +60,18 @@ const deleteReportsByIDModel = async (id) => {
     }
 }
 
+const toArray = (value) => {
+    if (!value) return [];
+    return Array.isArray(value) ? value : [value];
+};
+
 const createReportModel = async (email_creator, email_receiver, content_message, attached, uid_parcel) => {
     try {
-        // email_receiver debe ser un array, attached también
-        const emaiReceiverArray = Array.isArray(email_receiver) ? email_receiver : [email_receiver];
-        const attachedArray = attached ? [attached] : [];
-        
         const result = await pool.query(producerQueries.createReport, [
             email_creator,
-            emaiReceiverArray,
+            toArray(email_receiver),
             content_message,
-            attachedArray,
+            toArray(attached),
             uid_parcel
         ]);
         
@@ -84,13 +85,10 @@ const createReportModel = async (email_creator, email_receiver, content_message,
 
 const updateReportModel = async (email_receiver, content_message, attached, uid_report) => {
     try {
-        const emailReceiverArray = Array.isArray(email_receiver) ? email_receiver : [email_receiver];
-        const attachedArray = attached ? (Array.isArray(attached) ? attached : [attached]) : [];
-        
         const result = await pool.query(producerQueries.updateReport, [
-            emailReceiverArray,
+            toArray(email_receiver),
             content_message,
-            attachedArray,
+            toArray(attached),
             uid_report
         ]);
         

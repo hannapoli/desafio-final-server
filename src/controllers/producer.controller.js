@@ -1,6 +1,5 @@
 const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel, deleteReportsByIDModel, createReportModel, updateReportModel } = require("../models/producer.model");
-const { uploadOneFileCloudinaryHelper } = require("../helpers/cloudinary.helpers");
-
+const { normalizeAttachedArray, uploadFilesToCloudinary, extractPublicIds, deteleFilesCloudinaryHelper, no } = require("../helpers/cloudinary.helpers");
 
 const getAllParcelsController = async (req, res) => {
     const userUid = req.user.uid;
@@ -104,21 +103,13 @@ const createReportsController = async (req, res) => {
             });
         }
 
-        let attached = null;
-        if (req.file) {
-            const uploadResult = await uploadOneFileCloudinaryHelper(
-                req.file.buffer,
-                req.file.originalname
-            );
-            // Cloudinary URL
-            attached = uploadResult.url;
-        }
+        const attachedUrls = await uploadFilesToCloudinary(req.files);
 
         const newReport = await createReportModel(
             email_creator,
             email_receiver,
             content_message,
-            attached,
+            attachedUrls,
             idParcel
         );
 
@@ -143,19 +134,12 @@ const updateReportsByIDController = async (req, res) => {
     const { email_receiver, content_message } = req.body;
     
     try {
-        let attached = null;
-        if (req.file) {
-            const uploadResult = await uploadOneFileCloudinaryHelper(
-                req.file.buffer,
-                req.file.originalname
-            );
-            attached = uploadResult.url;
-        }
+        const attachedUrls = await uploadFilesToCloudinary(req.files);
         
         const updatedReport = await updateReportModel(
             email_receiver,
             content_message,
-            attached,
+            attachedUrls,
             idReport
         );
         
@@ -180,27 +164,39 @@ const updateReportsByIDController = async (req, res) => {
     }
 }
 const deleteReportsByIDController = async (req, res) => {
-    const id = req.params.idReport
+    const id = req.params.idReport;
+    
     try {
-        const deletedReport = await deleteReportsByIDModel(id)
-        if (deletedReport) {
-            return res.status(200).json({
-                ok: true,
-                msg: "reporte borrado",
-                deletedReport
-            })
-        } else {
+        const report = await getReportByIDModel(id);
+        
+        if (!report) {
             return res.status(404).json({
                 ok: false,
-                msg: "ERROR 404, reporte no encontrado",
-            })
+                msg: "ERROR 404, reporte no encontrado"
+            });
         }
+
+        if (report.attached && report.attached.length > 0) {
+            const attachedFlat = normalizeAttachedArray(report.attached);
+            const publicIds = extractPublicIds(attachedFlat);
+            await deteleFilesCloudinaryHelper(publicIds);
+        }
+
+        // Eliminamos el reporte de la base de datos
+        const deletedReport = await deleteReportsByIDModel(id);
+        
+        return res.status(200).json({
+            ok: true,
+            msg: "Reporte y archivos adjuntos eliminados correctamente",
+            deletedReport
+        });
+        
     } catch (error) {
-        console.log(error)
+        console.error("Error en deleteReportsByIDController:", error);
         return res.status(500).json({
             ok: false,
-            msg: 'Error, contacte con el administrador',
-        })
+            msg: "Error, contacte con el administrador"
+        });
     }
 }
 
