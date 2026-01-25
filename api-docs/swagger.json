@@ -1,0 +1,1079 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "AgroSync API",
+    "description": "Api para la gestión de campos de cultivo",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4001",
+      "description": "Servidor local"
+    },
+    {
+      "url": "https://agro-sync.onrender.com/",
+      "description": "Servidor en producción"
+    }
+  ],
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Autenticación y control de sesión"
+    },
+    {
+      "name": "producer",
+      "description": "Rutas del usuario con rol productor"
+    },
+    {
+      "name": "director",
+      "description": "Rutas del usuario con rol director"
+    },
+    {
+      "name": "analyst",
+      "description": "Rutas del usuario con rol analista"
+    },
+    {
+      "name": "consultant",
+      "description": "Rutas del usuario con rol asesor"
+    },
+    {
+      "name": "messages",
+      "description": "Rutas del chat"
+    },
+    {
+      "name": "cloudinary",
+      "description": "Rutas de la conexión a la nube de cloudinary"
+    },
+    {
+      "name": "reports",
+      "description": "Rutas del usuario con rol distribuidor"
+    },
+    {
+      "name": "alerts",
+      "description": "Rutas de alertas"
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "summary": "Registrar usuarios",
+        "tags": [
+          "auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "uid": {
+                    "type": "string",
+                    "maxLength": 250
+                  },
+                  "email": {
+                    "type": "string",
+                    "maxLength": 255
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 100
+                  },
+                  "role": {
+                    "type": "uid"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario creado correctamente",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "Usuario creado correctamente",
+                  "user": {
+                    "uid": 1,
+                    "email": "Email del usuario",
+                    "name": "Nombre del usuario",
+                    "role": "Rol del usaurio"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Firebase UID",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Falta firebase uid"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Usuario ya registrado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error: el usuario con este correo electrónico ya está registrado"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error interno del servidor"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "summary": "Obtener nombre y rol del usuario registrado",
+        "tags": [
+          "auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Información de usuario obtenida correctamente",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "name": "Nombre de usuario",
+                  "role": "Rol del usuario"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/upload": {
+      "post": {
+        "summary": "Registrar usuarios",
+        "tags": [
+          "cloudinary"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Archivos guardados en cloudinary correctamente",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "Archivos subidos de forma correcta",
+                  "data": "URLS de las imágenes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Archivos no encontrados",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "No se han encontrado para subir"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error, contacte con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/delete": {
+      "delete": {
+        "summary": "Registrar usuarios",
+        "tags": [
+          "cloudinary"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Archivos eliminados de forma correcta",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "Archivos eliminados de forma correcta",
+                  "data": "Información desde cloudinary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Archivos no encontrados",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "No se han encontrado archivos para eliminar"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error, contacte con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard/:id": {
+      "get": {
+        "summary": "Obtener todas las parcelas por ID",
+        "tags": [
+          "producer",
+          "director"
+        ],
+        "responses": {
+          "200": {
+            "description": "Obtener todas las parcelas del usuario por su ID",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "TODO OK",
+                  "data": "Datos de la parcela"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error del servidor, contacta con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/parcel/:id": {
+      "get": {
+        "summary": "Obtener información de la parcela por ID",
+        "tags": [
+          "producer",
+          "analyst",
+          "consultant",
+          "director"
+        ],
+        "responses": {
+          "200": {
+            "description": "Obtener información de la parcela por ID",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "TODO OK",
+                  "data": "Datos de la parcela"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error de permiso",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "No tienes permiso para acceder a esta parcela"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error del servidor, contacta con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/getAll/:email": {
+      "get": {
+        "summary": "Obtener todos los reportes por email del usuario",
+        "tags": [
+          "reports"
+        ],
+        "responses": {
+          "200": {
+            "description": "Obtener todos los reportes de un usuario por su email",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "TODO OK",
+                  "data": "Datos de los reportes"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error del servidor, contacta con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/geByID/:idReport": {
+      "get": {
+        "summary": "Obtener la información de un reporte por su ID",
+        "tags": [
+          "reports"
+        ],
+        "responses": {
+          "200": {
+            "description": "Obtener reporte por su ID",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "TODO OK",
+                  "data": "Datos de los reportes"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error del servidor, contacta con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/create/:email/:idParcel": {
+      "post": {
+        "summary": "Crear reporte por email del usuario y parcela",
+        "tags": [
+          "report"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email_creator": {
+                    "type": "string"
+                  },
+                  "email_receiver": {
+                    "type": "string"
+                  },
+                  "content_message": {
+                    "type": "string"
+                  },
+                  "attach": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Reporte creado correctamente",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "El reporte está creado",
+                  "data": "Datos del reporte"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error de email",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "No autorizado para crear reportes con este email"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error al crear el reporte, contacta con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/update/:idReport": {
+      "put": {
+        "summary": "Actualizar reporte por su ID",
+        "tags": [
+          "report"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email_receiver": {
+                    "type": "string"
+                  },
+                  "content_message": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reporte actualizado correctamente",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "Reporte actualizado correctamente",
+                  "data": "Datos del reporte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Reporte no encontrado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Reporte no encontrado"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error al actualizar el reporte, contacta con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/delete/:idReport": {
+      "delete": {
+        "summary": "Eliminar reporte por su ID",
+        "tags": [
+          "report"
+        ],
+        "responses": {
+          "200": {
+            "description": "Reporte eliminado correctamente",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "Reporte borrado",
+                  "deletedReport": "Datos del reporte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Reporte no encontrado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "ERROR, reporte no encontrado"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error, contacte con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard": {
+      "get": {
+        "summary": "Obtener todas las parcelas",
+        "tags": [
+          "analyst"
+        ],
+        "responses": {
+          "200": {
+            "description": "Información de las parcelas por asesor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "TODO OK",
+                  "data": "Datos de las parcelas"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error del servidor, contacta con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard/:email": {
+      "get": {
+        "summary": "Obtener todas las parcelas por email de usuario",
+        "tags": [
+          "consultant"
+        ],
+        "responses": {
+          "200": {
+            "description": "Obtener todas las parcelas del usuario por su ID",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "TODO OK",
+                  "data": "Datos de la parcela"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error del servidor, contacta con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getChats/:email": {
+      "get": {
+        "summary": "Obtener todos los chats por email del usuario",
+        "tags": [
+          "messages"
+        ],
+        "responses": {
+          "200": {
+            "description": "Chats encontrados correctamente",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "TODO OK",
+                  "data": "Datos de los mensajes"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "TODO MAL, CONTACTA CON EL ADMIN"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getAll/:email_creator/:email_receiver": {
+      "get": {
+        "summary": "Obtener todos los chats por email del usuario emisor y receptor",
+        "tags": [
+          "messages"
+        ],
+        "responses": {
+          "200": {
+            "description": "Chats encontrados correctamente",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "TODO OK",
+                  "data": "Datos de los mensajes"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "TODO MAL, CONTACTA CON EL ADMIN"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getByID/:idMessage": {
+      "get": {
+        "summary": "Obtener un mensaje por su ID",
+        "tags": [
+          "messages"
+        ],
+        "responses": {
+          "200": {
+            "description": "Mensaje encontrado correctamente",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "TODO OK",
+                  "data": "Mensaje"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "TODO MAL, CONTACTA CON EL ADMIN"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/create/:email_creator/:email_receiver": {
+      "post": {
+        "summary": "Enviar un mensaje",
+        "tags": [
+          "messages"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email_creator": {
+                    "type": "string",
+                    "maxLength": 255
+                  },
+                  "email_receiver": {
+                    "type": "string",
+                    "maxLength": 255
+                  },
+                  "content_message": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "content_message"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Mensaje enviado correctamente",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "Mensaje creado correctamente",
+                  "data": "Mensaje creado"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuario no encontrado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "NO existe ese usuario"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error, contacte con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/delete/:idMessage": {
+      "delete": {
+        "summary": "Eliminar todos los mensajes por email del usuario",
+        "tags": [
+          "messages"
+        ],
+        "responses": {
+          "200": {
+            "description": "Mensaje borrado correctamente",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "mensaje borrado",
+                  "deletedMessage": "Mensaje eliminado"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Mensaje no encontrado",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "ERROR 404, mensaje no encontrado"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error, contacte con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deleteAll/:email": {
+      "delete": {
+        "summary": "Eliminar mensajes por email del usuario",
+        "tags": [
+          "messages"
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversación eliminada correctamente",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": true,
+                  "msg": "mensaje borrado",
+                  "deletedMessage": "Información de los mensajes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Conversación no encontrada",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "ERROR 404, mensaje no encontrado"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error de servidor",
+            "content": {
+              "application/json": {
+                "example": {
+                  "ok": false,
+                  "msg": "Error, contacte con el administrador"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "firebaseAuth": { 
+        "type": "http", 
+        "scheme": "bearer", 
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "uid": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
+      "Parcel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "photo_url": {
+            "type": "string"
+          }
+        }
+      },
+      "Report": {
+        "type": "object",
+        "properties": {
+          "email_creator": {
+            "type": "string"
+          },
+          "email_receiver": {
+            "type": "string"
+          },
+          "content_message": {
+            "type": "string"
+          },
+          "attach": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "email_creator": {
+            "type": "string"
+          },
+          "email_receiver": {
+            "type": "string"
+          },
+          "content_message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Token inválido o ausente",
+        "content": {
+          "application/json": {
+            "example": {
+              "ok": false,
+              "msg": "No autorizado"
+            }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Error interno del servidor",
+        "content": {
+          "application/json": {
+            "example": {
+              "ok": false,
+              "msg": "Error interno del servidor"
+            }
+          }
+        }
+      },
+      "NotFoundError": {
+        "description": "Recurso no encontrado",
+        "content": {
+          "application/json": {
+            "example": {
+              "ok": false,
+              "msg": "Recurso no encontrado"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "emailParam": {
+        "name": "email",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "idParam": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "idReportParam": {
+        "name": "idReport",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "idMessageParam": {
+        "name": "idMessage",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const http = require("http");
 const { initSocket } = require("./socket");
-// const swaggerUi = require('swagger-ui-express');
+const swaggerUi = require('swagger-ui-express');
 // const swaggerSpec = require('./configs/swagger');
 require('dotenv').config();
 
@@ -26,6 +26,7 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 };
+const swaggerDocument = require('../api-docs/swagger.json');
 
 // ================================== MIDDLEWARES ==================================
 app.use(express.json());
@@ -33,6 +34,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use('/api/v1/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use(cors(corsOptions));
+app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // ========================== EJS para la página principal: ==========================
 app.set('view engine', 'ejs');
