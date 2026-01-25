@@ -5,7 +5,7 @@ const {getAllAlertByIdModel, getAllAlertsModel, getAllInfoMetoByUserModel, getIn
 const getAllAlertsController = async (req, res) =>  {
    const {email} = req.params
 try {
-        const data = await getAllAlertByIdModel(email)
+        const data = await getAllAlertsModel(email)
         console.log("<================ Alertas: ================>", data)
         return res.status(200).json({
             ok: true,
@@ -60,7 +60,7 @@ const getAllInfoMetoByUserController = async (req, res)=> {
 const getInfoMeteoByParcelController = async (req, res) => {
  const {uid_parcel} = req.params
     try {
-        const data = await getAlertByParcelController(uid_parcel)
+        const data = await getInfoMeteoByParcelModel(uid_parcel)
         console.log("<================ Alertas: ================>", data)
         return res.status(200).json({
             ok: true,
