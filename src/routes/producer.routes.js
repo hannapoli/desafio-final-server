@@ -11,20 +11,69 @@ const { validateUserUid, validateUserEmail } = require("../middlewares/validate.
 const upload = require("../middlewares/upload");
 
 //DASHBOARD
-router.get('/dashboard/:id', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"]), validateUserUid], getAllParcelsController)
+router.get('/dashboard/:id', [
+    verifyTokenMiddleware,
+    getFullUserDataMiddleware,
+    validateRole(["productor"]),
+    validateUserUid
+], getAllParcelsController)
 
-router.get('/parcel/:id', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], getParcelByIDController)
+router.get('/parcel/:id', [
+    verifyTokenMiddleware,
+    getFullUserDataMiddleware,
+    validateRole(["productor"])
+], getParcelByIDController)
 
 //REPORTES
-router.get('/reports/getAll/:email', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"]), validateUserEmail], getAllReportsController)
+router.get('/reports/getAll/:email', [
+    verifyTokenMiddleware,
+    getFullUserDataMiddleware,
+    validateRole(["productor"]),
+    validateUserEmail
+], getAllReportsController)
 
-router.get('/reports/getByID/:idReport', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], getReportByIDController)
+router.get('/reports/getByID/:idReport', [
+    verifyTokenMiddleware,
+    getFullUserDataMiddleware,
+    validateRole(["productor"])
+], getReportByIDController)
 
-router.post('/reports/create/:email/:idParcel', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"]), validateUserEmail, upload.single("attached")], createReportsController)
+router.post('/reports/create/:email/:idParcel', [
+    verifyTokenMiddleware,
+    getFullUserDataMiddleware,
+    validateRole(["productor"]),
+    validateUserEmail,
+    upload.array("attached", 10),
+    check('email_receiver')
+        .isEmail().withMessage("Escriba un email válido").bail()
+        .normalizeEmail(),
+    check('content_message')
+        .notEmpty().withMessage("El mensaje no puede estar vacío").bail()
+        .isString().withMessage("Escriba un mensaje válido")
+        .isLength({ min: 5, max: 500 }).withMessage("El mensaje debe tener entre 5 y 500 caracteres"),
+    validateInputMiddleware
+], createReportsController);
 
-router.put('/reports/update/:idReport', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"]), upload.single("attached")], updateReportsByIDController)
+router.put('/reports/update/:idReport', [
+    verifyTokenMiddleware,
+    getFullUserDataMiddleware,
+    validateRole(["productor"]),
+    upload.array("attached", 10),
+    check('email_receiver')
+        .isEmail().withMessage("Escriba un email válido").bail()
+        .normalizeEmail(),
+    check('content_message')
+        .notEmpty().withMessage("El mensaje no puede estar vacío").bail()
+        .isString().withMessage("Escriba un mensaje válido")
+        .isLength({ min: 5, max: 500 }).withMessage("El mensaje debe tener entre 5 y 500 caracteres"),
+    validateInputMiddleware
+], updateReportsByIDController);
 
-router.delete('/reports/delete/:idReport', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], deleteReportsByIDController)
+router.delete('/reports/delete/:idReport', [
+    verifyTokenMiddleware,
+    getFullUserDataMiddleware,
+    validateRole(["productor"])
+], deleteReportsByIDController)
 
 
 module.exports = router;
