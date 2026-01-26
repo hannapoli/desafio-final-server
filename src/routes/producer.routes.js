@@ -75,6 +75,6 @@ router.delete('/reports/delete/:idReport', [
     validateRole(["productor"])
 ], deleteReportsByIDController)
 
-router.get('/reports/download/:idReport', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], downloadReportPDF );
+router.get('/reports/download/:idReport', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor", "director", "asesor"])], downloadReportPDF );
 
 module.exports = router;
