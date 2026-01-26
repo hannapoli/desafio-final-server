@@ -1,6 +1,11 @@
 const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel, deleteReportsByIDModel, createReportModel, updateReportModel } = require("../models/producer.model");
 const { uploadOneFileCloudinaryHelper } = require("../helpers/cloudinary.helpers");
 
+const PDFDocument = require("pdfkit");
+const fs = require("fs");
+const path = require("path");
+const axios = require("axios");
+
 
 const getAllParcelsController = async (req, res) => {
     const userUid = req.user.uid;
@@ -204,6 +209,71 @@ const deleteReportsByIDController = async (req, res) => {
     }
 }
 
+
+const downloadReportPDF = async (req, res) => {
+    const idReport = req.params.idReport;
+    try {
+        const report = await getReportByIDModel(idReport);
+        if (!report) return res.status(404).json({ ok: false, msg: "Reporte no encontrado" });
+
+        const doc = new PDFDocument({ margin: 50 });
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader(
+            "Content-Disposition",
+            `attachment; filename=reporte_${report.uid_report}.pdf`
+        );
+        doc.pipe(res);
+
+        doc.fontSize(18).text(`Reportes de la parcela #${report.uid_parcel}`, { align: "center" });
+        doc.moveDown();
+
+        doc.fontSize(14).font('Helvetica-Bold').text('ID del reporte: ', { continued: true });
+        doc.fontSize(14).font('Helvetica').text(report.uid_report);
+        doc.fontSize(14).font('Helvetica-Bold').text('Creador del reporte: ', { continued: true });
+        doc.fontSize(14).font('Helvetica').text(report.email_creator);
+        doc.fontSize(14).font('Helvetica-Bold').text('Destinatario: ', { continued: true });
+        doc.fontSize(14).font('Helvetica').text(report.email_receiver.join(', '));
+        doc.fontSize(14).font('Helvetica-Bold').text('Informe: ', { continued: true });
+        doc.fontSize(14).font('Helvetica').text(report.content_message);
+        doc.fontSize(14).font('Helvetica-Bold').text('Fecha: ', { continued: true });
+        doc.fontSize(14).font('Helvetica').text(new Date(report.created_at).toLocaleString());
+
+        doc.moveDown(1);
+
+        if (report.attached && report.attached.length > 0) {
+            for (const [index, imageUrl] of report.attached.entries()) {
+                try {
+                    // Descargar la imagen de Cloudinary
+                    const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
+                    const imageBuffer = Buffer.from(response.data, "binary");
+
+                    // Guardar en disco temporal
+                    const tempFilePath = path.join(__dirname, `temp_${Date.now()}_${index}.jpg`);
+                    fs.writeFileSync(tempFilePath, imageBuffer);
+
+                    // Insertar en PDF
+                    const maxImageHeight = 250;
+                    const pageBottom = doc.page.height - doc.page.margins.bottom;
+                    const remainingSpace = pageBottom - doc.y;
+                    if (remainingSpace < maxImageHeight) doc.addPage();
+                    doc.image(tempFilePath, { width: 250 });
+                    doc.moveDown(1);
+
+                    // Borrar la imagen temporal
+                    fs.unlinkSync(tempFilePath);
+                } catch (err) {
+                    console.error("Error al procesar imagen:", err);
+                }
+            }
+        }
+        doc.end();
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ ok: false, msg: "Error al generar el PDF" });
+    }
+};
+
+
 module.exports = {
     getAllParcelsController,
     getParcelByIDController,
@@ -211,5 +281,6 @@ module.exports = {
     deleteReportsByIDController,
     getAllReportsController,
     getReportByIDController,
-    updateReportsByIDController
+    updateReportsByIDController,
+    downloadReportPDF
 }
