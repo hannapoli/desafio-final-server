@@ -5,7 +5,7 @@ const getAllParcelsController = async (req, res) => {
 
     try {
         const data = await getAllParcelsModel()
-        console.log("<================ Parcelas: ================>", data)
+        // console.log("<================ Parcelas (todas): ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
@@ -26,7 +26,7 @@ const getParcelByIDController = async (req, res) => {
     try {
         const data = await getParcelByIDModel(parcelId);
 
-        console.log("<================ Parcelas: ================>", data)
+        // console.log("<================ Parcela por ID: ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
