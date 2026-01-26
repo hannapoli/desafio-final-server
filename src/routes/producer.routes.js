@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllParcelsController, getParcelByIDController, createReportsController, deleteReportsByIDController, getAllReportsController, getReportByIDController, updateReportsByIDController, downloadReportPDF } = require("../controllers/producer.controller");
+const { getAllParcelsController, getParcelByIDController, createReportsController, deleteReportsByIDController, getAllReportsController, getReportByIDController, updateReportsByIDController, createParcelController, deleteParcelController} = require("../controllers/producer.controller");
 const { check } = require("express-validator");
 const { validateInputMiddleware } = require("../middlewares/validate.input.middleware");
 const { verifyTokenMiddleware } = require("../middlewares/verify.token.middleware");
@@ -23,6 +23,11 @@ router.get('/parcel/:id', [
     getFullUserDataMiddleware,
     validateRole(["productor"])
 ], getParcelByIDController)
+
+//PARCELS
+router.post('/createParcel', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"]), upload.single("photo")], createParcelController)
+
+router.delete('/deleteParcel/:idParcel', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], deleteParcelController)
 
 //REPORTES
 router.get('/reports/getAll/:email', [

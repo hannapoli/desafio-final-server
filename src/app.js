@@ -55,6 +55,8 @@ app.use('/api/v1/consultant', require('./routes/consultant.routes')); //Ruta par
 app.use('/api/v1', require('./routes/cloudinary.routes'));
 
 app.use('/api/v1/messages', require('./routes/messages.routes')); //Ruta para el panel de mensaje
+app.use('/api/v1/alerts', require('./routes/alerts.routes')); //Ruta para ver las alertas
+
 
 // =============================== Iniciar el servidor ===============================
 // app.listen(port, () => {
