@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllParcelsController, getParcelByIDController, createReportsController, deleteReportsByIDController, getAllReportsController, getReportByIDController, updateReportsByIDController, createParcelController, deleteParcelController} = require("../controllers/producer.controller");
+const { getAllParcelsController, getParcelByIDController, createReportsController, deleteReportsByIDController, getAllReportsController, getReportByIDController, updateReportsByIDController, createParcelController, deleteParcelController, downloadReportPDF} = require("../controllers/producer.controller");
 const { check } = require("express-validator");
 const { validateInputMiddleware } = require("../middlewares/validate.input.middleware");
 const { verifyTokenMiddleware } = require("../middlewares/verify.token.middleware");
