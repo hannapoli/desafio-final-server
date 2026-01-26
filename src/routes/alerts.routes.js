@@ -11,8 +11,8 @@ const {validateRole} = require("../middlewares/roles.middleware")
 
 
 //MENSAJES
-router.get('/getAllAlertsByUser/:email',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor","director"])], getAllAlertsController)
-router.get('/getAlertByParcel/:uid_parcel',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor","director"])], getAlertByParcelController)
+router.get('/getAllAlertsByUser/:email',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor","director", "asesor"])], getAllAlertsController)
+router.get('/getAlertByParcel/:uid_parcel',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor","director", "ase"])], getAlertByParcelController)
 router.get('/getAllInfoMeteoByUser/:email',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor","director"])], getAllInfoMetoByUserController)
 router.get('/getInfoMeteoByParcel/:uid_parcel',[verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor","director"])], getInfoMeteoByParcelController)
 

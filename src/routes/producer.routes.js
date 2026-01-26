@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllParcelsController, getParcelByIDController, createReportsController, deleteReportsByIDController, getAllReportsController, getReportByIDController, updateReportsByIDController } = require("../controllers/producer.controller");
+const { getAllParcelsController, getParcelByIDController, createReportsController, deleteReportsByIDController, getAllReportsController, getReportByIDController, updateReportsByIDController, createParcelController, deleteParcelController} = require("../controllers/producer.controller");
 const { check } = require("express-validator");
 const { validateInputMiddleware } = require("../middlewares/validate.input.middleware");
 const { verifyTokenMiddleware } = require("../middlewares/verify.token.middleware");
@@ -14,6 +14,11 @@ const upload = require("../middlewares/upload");
 router.get('/dashboard/:id', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"]), validateUserUid], getAllParcelsController)
 
 router.get('/parcel/:id', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], getParcelByIDController)
+
+//PARCELS
+router.post('/createParcel', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"]), upload.single("photo")], createParcelController)
+
+router.delete('/deleteParcel/:idParcel', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], deleteParcelController)
 
 //REPORTES
 router.get('/reports/getAll/:email', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"]), validateUserEmail], getAllReportsController)
