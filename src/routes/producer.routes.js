@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllParcelsController, getParcelByIDController, createReportsController, deleteReportsByIDController, getAllReportsController, getReportByIDController, updateReportsByIDController } = require("../controllers/producer.controller");
+const { getAllParcelsController, getParcelByIDController, createReportsController, deleteReportsByIDController, getAllReportsController, getReportByIDController, updateReportsByIDController, downloadReportPDF } = require("../controllers/producer.controller");
 const { check } = require("express-validator");
 const { validateInputMiddleware } = require("../middlewares/validate.input.middleware");
 const { verifyTokenMiddleware } = require("../middlewares/verify.token.middleware");
@@ -75,5 +75,6 @@ router.delete('/reports/delete/:idReport', [
     validateRole(["productor"])
 ], deleteReportsByIDController)
 
+router.get('/reports/download/:idReport', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], downloadReportPDF );
 
 module.exports = router;
