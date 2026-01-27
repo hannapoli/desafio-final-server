@@ -31,11 +31,11 @@ const producerQueries = {
     getInfoParcelCrop: `
     SELECT nombre_cultivo, nombre_variedad, nombre_cientifico, dias_madurez, habito_crecimiento, rango_ph, necesidades_hidricas, resistencias, rendimiento_teorico, grados_brix
     FROM cultivos INNER JOIN parcels ON cultivos.id_cultivo = parcels.id_cultivo
-    WHERE uid_parcel = $1
+    WHERE uid_parcel = $1;
     `,
 
     getInfoParcelSoil: `
-    SELECT uid_parcel, fecha, ndvi, gndvi, ndwi, savi FROM public.parcel_vegetation_indices WHERE uid_parcel = $1;
+    SELECT uid_parcel, fecha, ndvi, gndvi, ndwi, savi FROM public.parcel_vegetation_indices WHERE uid_parcel = $1  AND "fecha"::timestamp = (SELECT MAX("fecha"::timestamp) FROM public.parcel_vegetation_indices WHERE uid_parcel = $1);
     `
 }
 
