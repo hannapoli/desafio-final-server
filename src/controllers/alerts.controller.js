@@ -1,5 +1,4 @@
-
-const {getAllAlertByIdModel, getAllAlertsModel, getAllInfoMetoByUserModel, getInfoMeteoByParcelModel, getAlertByParcelModel} = require("../models/alerts.model")
+const {getAllAlertsModel, getAllInfoMeteoByUserModel, getInfoMeteoByParcelModel, getAlertByParcelModel, getParcelVegetationByParcelIDModel, getParcelCropsByParcelIDModel} = require("../models/alerts.model")
 
 
 const getAllAlertsController = async (req, res) =>  {
@@ -39,10 +38,10 @@ const  getAlertByParcelController = async (req,res) => {
     }
 }
 
-const getAllInfoMetoByUserController = async (req, res)=> {
+const getAllInfoMeteoByUserController = async (req, res)=> {
  const {email} = req.params
     try {
-        const data = await getAllInfoMetoByUserModel(email)
+        const data = await getAllInfoMeteoByUserModel(email)
         console.log("<================ Alertas: ================>", data)
         return res.status(200).json({
             ok: true,
@@ -76,9 +75,49 @@ const getInfoMeteoByParcelController = async (req, res) => {
     }
 }
 
-module.exports ={
-   getAlertByParcelController,
+const getParcelVegetationByParcelIDController = async (req, res) => {
+    const {uid_parcel} = req.params
+       try {
+           const data = await getParcelVegetationByParcelIDModel(uid_parcel)
+           console.log("<================ Vegetación: ================>", data)
+           return res.status(200).json({
+               ok: true,
+               msg: "TODO OK",
+               data
+           })
+       } catch (error) {
+           console.log(error)
+           return res.status(500).json({
+               ok: false,
+               msg: "Error del servidor, contacta con el administrador"
+           })
+       }
+   }
+
+   const getParcelCropsByParcelIDController = async (req, res) => {
+    const {uid_parcel} = req.params
+       try {
+           const data = await getParcelCropsByParcelIDModel(uid_parcel)
+           console.log("<================ Cultivos: ================>", data)
+           return res.status(200).json({
+               ok: true,
+               msg: "TODO OK",
+               data
+           })
+        } catch (error) {
+           console.log(error)
+           return res.status(500).json({
+               ok: false,
+               msg: "Error del servidor, contacta con el administrador"
+           })
+       }
+   }
+
+module.exports = {
     getAllAlertsController,
-    getAllInfoMetoByUserController,
-    getInfoMeteoByParcelController
-}
+    getAlertByParcelController,
+    getAllInfoMeteoByUserController,
+    getInfoMeteoByParcelController,
+    getParcelVegetationByParcelIDController,
+    getParcelCropsByParcelIDController
+};
