@@ -22,6 +22,11 @@ const producerQueries = {
         VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *`,
     deleteParcelById: `DELETE FROM parcels WHERE uid_parcel = $1 RETURNING *;`,
+    deleteAlertaByUid_parcel: 'DELETE FROM alertas WHERE uid_parcel = $1',
+    deleteMeteoByUid_parcel: 'DELETE FROM meteo_forecast WHERE uid_parcel = $1',
+    deleteWeatherByUid_parcel: 'DELETE FROM weather_archive WHERE uid_parcel = $1',
+    deleteVegetationByUid_parcel: 'DELETE FROM parcel_vegetation_indices WHERE uid_parcel = $1',
+    
     getInfoParcelSky: `
     SELECT uid_parcel, "time", temperature, relative_humidity, precipitation, cloud_cover, wind_speed, wind_direction 
     FROM public.meteo_forecast 
