@@ -100,6 +100,41 @@ const updateReportModel = async (email_receiver, content_message, attached, uid_
     }
 };
 
+const getInfoParcelSkyModel = async (id) => {
+    let result
+    try {
+        result = await pool.query(producerQueries.getInfoParcelSky, [id])
+        console.log(result.rows, "SKY MODELO")
+        return result.rows;
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
+
+const getInfoParcelCropModel = async (id) => {
+    let result
+    try {
+        result = await pool.query(producerQueries.getInfoParcelCrop, [id])
+        console.log(result.rows, "CROP MODELO")
+        return result.rows;
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
+
+const getInfoParcelSoilModel = async (id) => {
+    let result
+    try {
+        result = await pool.query(producerQueries.getInfoParcelSoil, [id])
+        console.log(result.rows, "SOIL MODELO")
+        return result.rows;
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
 
 module.exports= {
     getAllParcelsModel,
@@ -108,5 +143,8 @@ module.exports= {
     getReportByIDModel,
     deleteReportsByIDModel,
     createReportModel,
-    updateReportModel
+    updateReportModel, 
+    getInfoParcelSkyModel,
+    getInfoParcelCropModel,
+    getInfoParcelSoilModel,
 }

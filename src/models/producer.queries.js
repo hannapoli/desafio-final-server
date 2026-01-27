@@ -14,7 +14,23 @@ const producerQueries = {
         WHERE uid_report = $4
         RETURNING *
     `,
-    deleteReportsByID:`DELETE FROM reports WHERE uid_report = $1 RETURNING *;`
+    deleteReportsByID:`DELETE FROM reports WHERE uid_report = $1 RETURNING *;`,
+
+    getInfoParcelSky: `
+    SELECT uid_parcel, "time", temperature, relative_humidity, precipitation, cloud_cover, wind_speed, wind_direction 
+    FROM public.meteo_forecast 
+    WHERE uid_parcel = $1 AND "time"::timestamp = (SELECT MAX("time"::timestamp) FROM public.meteo_forecast WHERE uid_parcel = $1);
+    `,
+
+    getInfoParcelCrop: `
+    SELECT nombre_cultivo, nombre_variedad, nombre_cientifico, dias_madurez, habito_crecimiento, rango_ph, necesidades_hidricas, resistencias, rendimiento_teorico, grados_brix
+    FROM cultivos INNER JOIN parcels ON cultivos.id_cultivo = parcels.id_cultivo
+    WHERE uid_parcel = $1
+    `,
+
+    getInfoParcelSoil: `
+    SELECT uid_parcel, fecha, ndvi, gndvi, ndwi, savi FROM public.parcel_vegetation_indices WHERE uid_parcel = $1;
+    `
 }
 
 module.exports = {

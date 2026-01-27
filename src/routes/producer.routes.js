@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllParcelsController, getParcelByIDController, createReportsController, deleteReportsByIDController, getAllReportsController, getReportByIDController, updateReportsByIDController, downloadReportPDF } = require("../controllers/producer.controller");
+const { getAllParcelsController, getParcelByIDController, createReportsController, deleteReportsByIDController, getAllReportsController, getReportByIDController, updateReportsByIDController, downloadReportPDF, getInfoParcelData } = require("../controllers/producer.controller");
 const { check } = require("express-validator");
 const { validateInputMiddleware } = require("../middlewares/validate.input.middleware");
 const { verifyTokenMiddleware } = require("../middlewares/verify.token.middleware");
@@ -76,5 +76,8 @@ router.delete('/reports/delete/:idReport', [
 ], deleteReportsByIDController)
 
 router.get('/reports/download/:idReport', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor", "director", "asesor"])], downloadReportPDF );
+
+// INFORMACIÓN CULTIVOS
+router.get('/parcel/data/:id', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], getInfoParcelData );
 
 module.exports = router;

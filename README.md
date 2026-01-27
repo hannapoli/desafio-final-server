@@ -38,6 +38,7 @@ npm run dev
 - PG
 - Socket.io
 - Swagger
+- PDF Kit
 
 ## VARIABLES DE ENTORNO
 ```bash

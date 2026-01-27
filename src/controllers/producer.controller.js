@@ -1,4 +1,4 @@
-const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel, deleteReportsByIDModel, createReportModel, updateReportModel } = require("../models/producer.model");
+const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel, deleteReportsByIDModel, createReportModel, updateReportModel, getInfoParcelSkyModel, getInfoParcelCropModel, getInfoParcelSoilModel } = require("../models/producer.model");
 const { normalizeAttachedArray, uploadFilesToCloudinary, extractPublicIds, deteleFilesCloudinaryHelper } = require("../helpers/cloudinary.helpers");
 
 const PDFDocument = require("pdfkit");
@@ -268,6 +268,31 @@ const downloadReportPDF = async (req, res) => {
     }
 };
 
+const getInfoParcelData = async (req, res) => {
+    const idParcel = req.params.id
+    try {
+        const dataSky = await getInfoParcelSkyModel(idParcel)
+        const dataSoil = await getInfoParcelSoilModel(idParcel) 
+        const dataCrop = await getInfoParcelCropModel(idParcel)
+        console.log("<================ Data parcelas: ================>", dataSky, dataSoil, dataCrop)
+        return res.status(200).json({
+            ok: true,
+            msg: "TODO OK",
+            data: {
+                dataSky,
+                dataSoil,
+                dataCrop
+            }
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg: "Error del servidor, contacta con el administrador"
+        })
+    }
+}
+
 
 module.exports = {
     getAllParcelsController,
@@ -277,5 +302,6 @@ module.exports = {
     getAllReportsController,
     getReportByIDController,
     updateReportsByIDController,
-    downloadReportPDF
+    downloadReportPDF,
+    getInfoParcelData
 }
