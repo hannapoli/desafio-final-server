@@ -100,6 +100,49 @@ const updateReportModel = async (email_receiver, content_message, attached, uid_
     }
 };
 
+const existsParcelModel = async (uid_parcel) => {
+    let result
+    try {
+        result= await pool.query(producerQueries.existsParcel, [uid_parcel])
+        return result.rows[0]
+    } catch(error) {
+        console.log('Este es el error al comprobar si exisiste una parcela: ', error)
+        throw error
+    }
+}
+
+const createParcelModel = async (body) => {
+    const {uid_parcel, uid_producer, name_parcel, id_cultivo, coordinates_parcel, photo_url} = body
+
+     try {        
+        const result = await pool.query(producerQueries.createParcel, [
+           uid_parcel,
+           uid_producer,
+           name_parcel,
+           id_cultivo,
+           coordinates_parcel,
+           photo_url
+        ]);
+        
+        console.log(result.rows[0], "Parcela creada");
+        return result.rows[0];
+    } catch (error) {
+        console.error("Error en creaParcela:", error);
+        throw error;
+    }
+}
+
+const deleteParcelModel = async (uid) => {
+    let result
+    try {
+        result = await pool.query(producerQueries.deleteParcelById, [uid])
+        // console.log(result.rows, "COLUMNAS")
+        return result.rows[0];
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
 const getInfoParcelSkyModel = async (id) => {
     let result
     try {
@@ -143,7 +186,10 @@ module.exports= {
     getReportByIDModel,
     deleteReportsByIDModel,
     createReportModel,
-    updateReportModel, 
+    updateReportModel,
+    existsParcelModel,
+    createParcelModel,
+    deleteParcelModel, 
     getInfoParcelSkyModel,
     getInfoParcelCropModel,
     getInfoParcelSoilModel,

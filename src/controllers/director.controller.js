@@ -6,7 +6,7 @@ const getAllParcelsController = async (req, res) => {
     
     try {
         const data = await getAllParcelsModel(userUid);
-        console.log("<================ Parcelas: ================>", data)
+        // console.log("<================ Parcelas (todas): ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
@@ -25,7 +25,7 @@ const getParcelByIDController = async (req, res) => {
     const parcelId = req.params.id;
     try {
         const data = await getParcelByIDModel(parcelId);
-        console.log("<================ Parcelas: ================>", data)
+        // console.log("<================ Parcela por ID: ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
@@ -45,7 +45,7 @@ const getAllReportsController = async (req, res) => {
     
     try {
         const data = await getAllReportsModel(userEmail);
-        console.log("<================ Reportes: ================>", data)
+        // console.log("<================ Reportes (todos): ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
@@ -71,7 +71,7 @@ const getReportByIDController = async (req, res) => {
                 msg: "No tienes permiso para acceder a este reporte"
             });
         }
-        console.log("<================ Reportes: ================>", data)
+        // console.log("<================ Reporte por ID: ================>", data)
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",

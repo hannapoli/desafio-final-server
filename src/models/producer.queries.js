@@ -1,3 +1,5 @@
+const { existsParcelModel } = require("./producer.model")
+
 const producerQueries = {
     getAllParcels: `SELECT * FROM parcels WHERE uid_producer= $1`,
     getParcelByID: `SELECT * FROM parcels WHERE uid_parcel = $1`,
@@ -15,7 +17,11 @@ const producerQueries = {
         RETURNING *
     `,
     deleteReportsByID:`DELETE FROM reports WHERE uid_report = $1 RETURNING *;`,
-
+    existsParcel:  `SELECT * FROM parcels WHERE uid_parcel = $1`,
+    createParcel: `INSERT INTO parcels (uid_parcel, uid_producer, name_parcel, id_cultivo, coordinates_parcel, photo_url)
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING *`,
+    deleteParcelById: `DELETE FROM parcels WHERE uid_parcel = $1 RETURNING *;`,
     getInfoParcelSky: `
     SELECT uid_parcel, "time", temperature, relative_humidity, precipitation, cloud_cover, wind_speed, wind_direction 
     FROM public.meteo_forecast 

@@ -51,16 +51,13 @@ app.use('/api/v1/producer', require('./routes/producer.routes')); //Ruta para el
 app.use('/api/v1/director', require('./routes/director.routes')); //Ruta para el panel de director
 app.use('/api/v1/analyst', require('./routes/analyst.routes')); //Ruta para el panel de analyst
 app.use('/api/v1/consultant', require('./routes/consultant.routes')); //Ruta para el panel de analyst
-
-app.use('/api/v1', require('./routes/cloudinary.routes'));
-
+app.use('/api/v1/admin', require('./routes/admin.routes')); //Ruta para el panel de admin
+app.use('/api/v1', require('./routes/cloudinary.routes')); //Ruta para subir y eliminar imágenes en Cloudinary
 app.use('/api/v1/messages', require('./routes/messages.routes')); //Ruta para el panel de mensaje
+app.use('/api/v1/alerts', require('./routes/alerts.routes')); //Ruta para ver las alertas
+
 
 // =============================== Iniciar el servidor ===============================
-// app.listen(port, () => {
-//     console.log(`Servidor activo en el puerto ${port}​`);
-// });
-
 const server = http.createServer(app);
 
 /* ===== SOCKET.IO ===== */
