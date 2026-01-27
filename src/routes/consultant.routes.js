@@ -2,12 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const { getAllParcelsController, getParcelByIDController, getAllReportsController, getReportByIDController } = require("../controllers/consultant.controller");
-const { check } = require("express-validator");
-const { validateInputMiddleware } = require("../middlewares/validate.input.middleware");
 const { verifyTokenMiddleware } = require("../middlewares/verify.token.middleware");
 const { getFullUserDataMiddleware } = require("../middlewares/user.data.middleware");
 const { validateRole } = require("../middlewares/roles.middleware");
-const { validateUserEmail } = require("../middlewares/validate.access.middleware");
 
 //DASHBOARD //El asesor proporciona el email del productor para ver sus tierras
 router.get('/dashboard/:email', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["asesor"])], getAllParcelsController)

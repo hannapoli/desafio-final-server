@@ -18,7 +18,8 @@ const getFullUserDataMiddleware = async (req, res, next) => {
             'd9ac3cf9-80a5-46b0-b7f3-fc9e9ef05768': 'distribuidor',
             'f4409e7e-ec44-4f3b-86a6-a3692a81a7e1': 'asesor',
             'f868c9f0-be0b-4817-bbd2-aa8775e527d8': 'analista',
-            'fe95e061-f046-46cb-9253-5ede9be81a12': 'director'
+            'fe95e061-f046-46cb-9253-5ede9be81a12': 'director',
+            'cc6f608e-6b1f-4e1f-a64b-9a4bb590f22b': 'admin'
         };
         const userRole = roleMap[user.uid_rol] || 'rol_desconocido';
         
