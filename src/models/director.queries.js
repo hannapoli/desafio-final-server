@@ -6,6 +6,15 @@ const directorQueries = {
     getParcelByID: `SELECT * FROM parcels WHERE uid_parcel = $1`,
     getAllReports: `SELECT * FROM reports WHERE $1 = ANY(email_receiver);`,
     getReportByID: `SELECT * FROM reports WHERE uid_report = $1`,
+    getReportByID: `SELECT * FROM reports WHERE uid_report = $1`,
+    getAllConsultant: `SELECT * FROM users WHERE uid_rol = 'f4409e7e-ec44-4f3b-86a6-a3692a81a7e1';`,
+    getUserByEmail: `SELECT * FROM users WHERE email_user = $1;`,
+    asignarAsesor: `INSERT INTO producer_consultant (uid_producer, uid_consultant)
+        VALUES (
+            (SELECT firebase_uid_user FROM users WHERE email_user = $1),
+            (SELECT firebase_uid_user FROM users WHERE email_user = $2)
+            )
+        RETURNING *;`,
 }
 
 module.exports = {

@@ -49,9 +49,22 @@ const getReportByIDModel = async (id) => {
     }
 };
 
+const getAllProducersModel = async (id) => {
+    let result;
+    try {
+        result = await pool.query( consultantQueries.getAllProducers, [id]);
+        console.log(result.rows, "COLUMNAS");
+        return result.rows;
+    } catch (error) {
+        console.log(error, "<===========================>");
+        return error;
+    }
+};
+
 module.exports= {
     getAllParcelsModel,
     getParcelByIDModel,
     getAllReportsModel,
-    getReportByIDModel
+    getReportByIDModel,
+    getAllProducersModel
 }

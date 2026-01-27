@@ -1,4 +1,4 @@
-const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel} = require("../models/consultant.model")
+const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel, getAllProducersModel} = require("../models/consultant.model")
 
 
 const getAllParcelsController = async (req, res) => {
@@ -82,10 +82,29 @@ const getReportByIDController = async (req, res) => {
     }
 }
 
+const getAllProducersController = async (req, res) => {
+    const id = req.params.id
+    try {
+        const data = await getAllProducersModel(id)
+        return res.status(200).json({
+            ok: true,
+            msg: "TODO OK",
+            data
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg: "Error del servidor, contacta con el administrador"
+        })
+    }
+}
+
 
 module.exports = {
     getAllParcelsController,
     getParcelByIDController,
     getAllReportsController,
-    getReportByIDController
+    getReportByIDController,
+    getAllProducersController
 }
