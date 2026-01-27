@@ -60,6 +60,17 @@ const getAllConsultantModel = async () => {
         return error;
     }
 }
+const getAllProductorModel = async (id) => {
+    let result
+    try {
+        result = await pool.query(directorQueries.getAllProductor, [id])
+        console.log(result.rows, "COLUMNAS")
+        return result.rows;
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
 
 const getUserByEmailModel = async (email) => {
     let result
@@ -92,5 +103,6 @@ module.exports= {
     getReportByIDModel,
     getAllConsultantModel,
     getUserByEmailModel,
-    asignarAsesorModel
+    asignarAsesorModel,
+    getAllProductorModel
 }

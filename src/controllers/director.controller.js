@@ -1,4 +1,4 @@
-const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel, getAllConsultantModel, getUserByEmailModel, asignarAsesorModel} = require("../models/director.model")
+const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel, getAllConsultantModel, getUserByEmailModel, asignarAsesorModel, getAllProductorModel} = require("../models/director.model")
 
 
 const getAllParcelsController = async (req, res) => {
@@ -103,6 +103,24 @@ const getAllConsultantController = async (req, res) => {
     }
 }
 
+const getAllProductorController = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const data = await getAllProductorModel(id);
+        return res.status(200).json({
+            ok: true,
+            msg: "TODO OK",
+            data
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg: "Error del servidor, contacta con el administrador"
+        })
+    }
+}
+
 const asignarAsesorController = async (req, res) => {
     const emailProductor = req.params.emailProductor;
     const emailConsultant = req.params.emailConsultant;
@@ -145,5 +163,6 @@ module.exports = {
     getAllReportsController,
     getReportByIDController,
     getAllConsultantController,
-    asignarAsesorController
+    asignarAsesorController,
+    getAllProductorController
 }
