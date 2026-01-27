@@ -271,44 +271,6 @@ const downloadReportPDF = async (req, res) => {
 };
 
 
-// const createParcelController = async (req, res) =>  {
-//     const {body} = req
-//     const {uid_parcel} = body
-//     try {
-//         const existe = await existsParcelModel(uid_parcel);
-//         // console.log(existe, "existe desde producer controllers")
-//         if(existe){
-//             return res.status(401).json({
-//                 ok:false,
-//                 msg: "Ya hay una parcela con ese uid"
-//             })
-//         }
-
-//         let attached = null;
-//         if (req.file) {
-//             const uploadResult = await uploadOneFileCloudinaryHelper(
-//                 req.file.buffer,
-//                 req.file.originalname
-//             );
-//             // Cloudinary URL
-//             attached = uploadResult.url;
-//         }
-
-//         req.body.photo_url = attached
-
-//         const data = await createParcelModel(body)
-//         console.log("Se ha añadido esta parcela:", data);
-//         return res.status(201).json({
-//             ok: true,
-//             msg: "Parcela añadida correctamente",
-//             data
-//         })
-        
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
-
 const createParcelController = async (req, res) => {
   try {
     const { uid_parcel } = req.body;
@@ -360,23 +322,23 @@ const createParcelController = async (req, res) => {
 };
 
 
-const deleteParcelController = async () => {
+const deleteParcelController = async (req, res) => {
 //   console.log('hola desde eliminar parcela controller')
     const uid = parseInt(req.params.idParcel)
     // console.log(uid)
     try {
-        const deletedParcel = await deleteParcelModel(uid)
+        const data = await deleteParcelModel(uid)
         // console.log({deletedParcel})
-        if (deletedParcel) {
+        if (data) {
             return res.status(200).json({
                 ok: true,
                 msg: "Se ha borrado la parcela",
-                deletedParcel
+                data
             })
         } else {
             return res.status(404).json({
                 ok: false,
-                msg: "ERROR 404 al borrar parcela",
+                msg: "ERROR 404 al borrar parcela"
             })
         }
     } catch (error) {

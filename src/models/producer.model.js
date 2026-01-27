@@ -112,22 +112,22 @@ const existsParcelModel = async (uid_parcel) => {
 }
 
 const createParcelModel = async (body) => {
-    const {uid_parcel, uid_producer, name_parcel, product_parcel, coordinates_parcel, photo_url} = body
+    const {uid_parcel, uid_producer, name_parcel, id_cultivo, coordinates_parcel, photo_url} = body
 
      try {        
         const result = await pool.query(producerQueries.createParcel, [
            uid_parcel,
            uid_producer,
            name_parcel,
-           product_parcel,
+           id_cultivo,
            coordinates_parcel,
            photo_url
         ]);
         
-        console.log(result.rows[0], "REPORTE CREADO");
+        console.log(result.rows[0], "Parcela creada");
         return result.rows[0];
     } catch (error) {
-        console.error("Error en createReportModel:", error);
+        console.error("Error en creaParcela:", error);
         throw error;
     }
 }
