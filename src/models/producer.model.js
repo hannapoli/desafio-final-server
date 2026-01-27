@@ -132,12 +132,24 @@ const createParcelModel = async (body) => {
     }
 }
 
-const deleteParcelModel = async (uid) => {
+const deleteParcelModel = async (uid_parcel) => {
     let result
     try {
-        result = await pool.query(producerQueries.deleteParcelById, [uid])
-        // console.log(result.rows, "COLUMNAS")
-        return result.rows[0];
+   
+        await pool.query('BEGIN'); // begin hace que si algo falla en cualquier query posterior, nada se aplicará y la base de datos quedará igual que antes
+
+        await pool.query(producerQueries.deleteVegetationByUid_parcel, [uid_parcel]);
+        await pool.query(producerQueries.deleteAlertaByUid_parcel, [uid_parcel]);
+        await pool.query(producerQueries.deleteMeteoByUid_parcel, [uid_parcel]);
+        await pool.query(producerQueries.deleteWeatherByUid_parcel, [uid_parcel]);
+
+        const { rows } = await pool.query(
+        producerQueries.deleteParcelById,
+        [uid_parcel]
+        );
+
+        await pool.query('COMMIT');
+        return rows[0]; // devuelve la parcela borrada
     } catch (error) {
         console.log(error, "<===========================>")
         return error;
