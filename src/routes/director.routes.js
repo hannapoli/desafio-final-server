@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllParcelsController, getParcelByIDController, getAllReportsController, getReportByIDController } = require("../controllers/director.controller");
+const { getAllParcelsController, getParcelByIDController, getAllReportsController, getReportByIDController, getAllConsultantController, asignarAsesorController } = require("../controllers/director.controller");
 const { verifyTokenMiddleware } = require("../middlewares/verify.token.middleware");
 const { getFullUserDataMiddleware } = require("../middlewares/user.data.middleware");
 const { validateRole } = require("../middlewares/roles.middleware");
@@ -17,5 +17,8 @@ router.get('/reports/getAll/:email', [verifyTokenMiddleware, getFullUserDataMidd
 
 router.get('/reports/getByID/:idReport', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["director"])], getReportByIDController)
 
+router.get('/consultant/getAll', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["director"])], getAllConsultantController)
+
+router.post('/consultant/assign/:emailProductor/:emailConsultant', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["director"])], asignarAsesorController)
 
 module.exports = router;
