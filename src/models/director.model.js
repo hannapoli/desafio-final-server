@@ -25,10 +25,12 @@ const getParcelByIDModel = async (id) => {
     }
 }
 
-const getAllReportsModel = async (email) => {
+const getAllReportsModel = async (userEmail, emailProductor) => {
     let result
+    console.log(userEmail)
+    console.log(emailProductor)
     try {
-        result = await pool.query(directorQueries.getAllReports, [email])
+        result = await pool.query(directorQueries.getAllReports, [userEmail, emailProductor])
         console.log(result.rows, "COLUMNAS")
         return result.rows;
     } catch (error) {
