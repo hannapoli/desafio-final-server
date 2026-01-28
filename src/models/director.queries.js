@@ -9,6 +9,8 @@ const directorQueries = {
     getReportByID: `SELECT * FROM reports WHERE uid_report = $1`,
     getAllConsultant: `SELECT * FROM users WHERE uid_rol = 'f4409e7e-ec44-4f3b-86a6-a3692a81a7e1';`,
     getAllProductor: `SELECT u.*
+        FROM users AS u WHERE u.uid_rol = '9717e4fb-c034-46e9-9350-9375f797a384'`,
+    getAllProductorByID: `SELECT u.*
         FROM users AS u
         INNER JOIN director_producer AS dp
         ON dp.uid_producer = u.firebase_uid_user
@@ -20,6 +22,32 @@ const directorQueries = {
             (SELECT firebase_uid_user FROM users WHERE email_user = $1),
             (SELECT firebase_uid_user FROM users WHERE email_user = $2)
             )
+        RETURNING *;`,
+    desasignarAsesor: `DELETE FROM producer_consultant
+        WHERE uid_producer = (
+            SELECT firebase_uid_user FROM users WHERE email_user = $1
+        )
+        AND uid_consultant = (
+            SELECT firebase_uid_user FROM users WHERE email_user = $2
+        )
+        RETURNING *;`,
+    getConsultantsByProductor: `SELECT *
+        FROM users
+        WHERE firebase_uid_user IN (
+            SELECT pc.uid_consultant
+            FROM producer_consultant AS pc
+            INNER JOIN users AS p
+                ON p.firebase_uid_user = pc.uid_producer
+            WHERE p.email_user = $1);`,
+    contratarProductor:  `
+        INSERT INTO director_producer (uid_director, uid_producer)
+        VALUES ($1, $2)
+        ON CONFLICT (uid_director, uid_producer) DO NOTHING
+        RETURNING *;`,
+    despedirProductor: `
+        DELETE FROM director_producer
+        WHERE uid_director = $1
+            AND uid_producer = $2
         RETURNING *;`,
 }
 

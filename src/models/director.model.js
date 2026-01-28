@@ -60,10 +60,21 @@ const getAllConsultantModel = async () => {
         return error;
     }
 }
-const getAllProductorModel = async (id) => {
+const getAllProductorModel = async () => {
     let result
     try {
-        result = await pool.query(directorQueries.getAllProductor, [id])
+        result = await pool.query(directorQueries.getAllProductor)
+        console.log(result.rows, "COLUMNAS")
+        return result.rows;
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
+const getAllProductorByIDModel = async (id) => {
+    let result
+    try {
+        result = await pool.query(directorQueries.getAllProductorByID, [id])
         console.log(result.rows, "COLUMNAS")
         return result.rows;
     } catch (error) {
@@ -84,10 +95,58 @@ const getUserByEmailModel = async (email) => {
     }
 }
 
+const getConsultantsByProductorModel = async (email) => {
+    let result
+    try {
+        console.log(email)
+        result = await pool.query(directorQueries.getConsultantsByProductor, [email])
+        console.log(result.rows, "COLUMNAS")
+        return result.rows;
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
+
 const asignarAsesorModel = async (emailProductor, emailConsultant) => {
     let result
     try {
         result = await pool.query(directorQueries.asignarAsesor, [emailProductor, emailConsultant])
+        console.log(result.rows, "COLUMNAS")
+        return result.rows[0];
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
+
+const desasignarAsesorModel = async (emailProductor, emailConsultant) => {
+    let result
+    try {
+        result = await pool.query(directorQueries.desasignarAsesor, [emailProductor, emailConsultant])
+        console.log(result.rows, "COLUMNAS")
+        return result.rows[0];
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
+const contratarProductorModel = async (uid, uid2) => {
+    let result
+    try {
+        result = await pool.query(directorQueries.contratarProductor, [uid, uid2])
+        console.log(result.rows, "COLUMNAS")
+        return result.rows[0];
+    } catch (error) {
+        console.log(error, "<===========================>")
+        return error;
+    }
+}
+
+const despedirProductorModel = async (uid, uid2) => {
+    let result
+    try {
+        result = await pool.query(directorQueries.despedirProductor, [uid, uid2])
         console.log(result.rows, "COLUMNAS")
         return result.rows[0];
     } catch (error) {
@@ -104,5 +163,10 @@ module.exports= {
     getAllConsultantModel,
     getUserByEmailModel,
     asignarAsesorModel,
-    getAllProductorModel
+    getAllProductorByIDModel,
+    getConsultantsByProductorModel,
+    desasignarAsesorModel,
+    getAllProductorModel,
+    contratarProductorModel, 
+    despedirProductorModel
 }

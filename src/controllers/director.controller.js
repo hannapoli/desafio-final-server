@@ -1,4 +1,4 @@
-const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel, getAllConsultantModel, getUserByEmailModel, asignarAsesorModel, getAllProductorModel} = require("../models/director.model")
+const { getAllParcelsModel, getParcelByIDModel, getAllReportsModel, getReportByIDModel, getAllConsultantModel, getUserByEmailModel, asignarAsesorModel, getAllProductorByIDModel, getConsultantsByProductorModel, desasignarAsesorModel, getAllProductorModel, contratarProductorModel, despedirProductorModel} = require("../models/director.model")
 
 
 const getAllParcelsController = async (req, res) => {
@@ -103,10 +103,27 @@ const getAllConsultantController = async (req, res) => {
     }
 }
 
-const getAllProductorController = async (req, res) => {
+const getAllProductorController = async (req, res) => {  
+    try {
+        const data = await getAllProductorModel();
+        return res.status(200).json({
+            ok: true,
+            msg: "TODO OK",
+            data
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg: "Error del servidor, contacta con el administrador"
+        })
+    }
+}
+
+const getAllProductorByIDController = async (req, res) => {
     const id = req.params.id;
     try {
-        const data = await getAllProductorModel(id);
+        const data = await getAllProductorByIDModel(id);
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
@@ -178,7 +195,82 @@ const desasignarAsesorController = async (req, res) => {
             });
         }
         
-        const data = await asignarAsesorModel(emailProductor, emailConsultant);
+        const data = await desasignarAsesorModel(emailProductor, emailConsultant);
+        return res.status(200).json({
+            ok: true,
+            msg: "TODO OK",
+            data
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg: "Error del servidor, contacta con el administrador"
+        })
+    }
+}
+
+const getConsultantsByProductorController = async (req, res) => {
+    const userEmail = req.params.email;
+    
+    try {
+        const data = await getConsultantsByProductorModel(userEmail);
+        // console.log("<================ Reportes (todos): ================>", data)
+        return res.status(200).json({
+            ok: true,
+            msg: "TODO OK",
+            data
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg: "Error del servidor, contacta con el administrador"
+        })
+    }
+}
+
+const contratarProductorController = async (req, res) => {
+    const emailProductor = req.params.emailProductor;
+    const userUid = req.user.uid;
+    try {
+        
+        const exist = await getUserByEmailModel(emailProductor)
+        if (!exist || exist.uid_rol != "9717e4fb-c034-46e9-9350-9375f797a384"){
+            return res.status(403).json({
+                ok: false,
+                msg: "El usuario no existe o no es productor"
+            });
+        }
+        
+        const data = await contratarProductorModel(userUid, exist.firebase_uid_user);
+        return res.status(200).json({
+            ok: true,
+            msg: "TODO OK",
+            data
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            msg: "Error del servidor, contacta con el administrador"
+        })
+    }
+}
+
+const despedirProductorController = async (req, res) => {
+    const emailProductor = req.params.emailProductor;
+    const userUid = req.user.uid;
+    try {
+        const exist = await getUserByEmailModel(emailProductor)
+        if (!exist || exist.uid_rol != "9717e4fb-c034-46e9-9350-9375f797a384"){
+            return res.status(403).json({
+                ok: false,
+                msg: "El usuario no existe o no es productor"
+            });
+        }
+        
+        const data = await despedirProductorModel(userUid, exist.firebase_uid_user);
         return res.status(200).json({
             ok: true,
             msg: "TODO OK",
@@ -200,6 +292,10 @@ module.exports = {
     getReportByIDController,
     getAllConsultantController,
     asignarAsesorController,
+    getAllProductorByIDController,
+    desasignarAsesorController,
+    getConsultantsByProductorController,
     getAllProductorController,
-    desasignarAsesorController
+    contratarProductorController, 
+    despedirProductorController
 }
