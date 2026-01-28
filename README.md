@@ -128,18 +128,6 @@ Para que el backend funcione correctamente, debes configurar las siguientes clav
 
 > **Nota:** Asegúrate de que el archivo `.env` esté incluido en tu `.gitignore` para no exponer credenciales sensibles en el repositorio público.
 
-
-### Detalle de las Variables de Env (.env)
-
-| **Variable** | **Descripción** | **Origen** |
-| :--- | :--- | :--- |
-| PORT | Puerto local donde se ejecutará el servidor. | 4000 |
-| DATABASE_URL | String de conexión a PostgreSQL. | Postgres Local |
-| FIREBASE_SERVICE_ACCOUNT | Contenido del JSON de tu cuenta de servicio (en una línea). | Firebase Console |
-| CLOUDINARY_CLOUD_NAME | Nombre de tu nube en el dashboard. | Cloudinary |
-| CLOUDINARY_API_KEY | Clave de API para autenticación. | Cloudinary |
-| CLOUDINARY_API_SECRET | Firma secreta de API. | Cloudinary |
-
 ⚠️ **Importante:** Para la variable FIREBASE_SERVICE_ACCOUNT, utiliza una versión "minificada" del JSON (sin saltos de línea) para evitar errores de lectura.
 
 
