@@ -23,7 +23,7 @@ const corsOptions = {
     },
     optionsSuccessStatus: 200,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', "ngrok-skip-browser-warning"],
     credentials: true
 };
 const swaggerDocument = require('../api-docs/swagger.json');
