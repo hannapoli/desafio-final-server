@@ -42,9 +42,10 @@ const getParcelByIDController = async (req, res) => {
 
 const getAllReportsController = async (req, res) => {
     const userEmail = req.user.email;
+    const emailProductor = req.params.emailProductor;
     
     try {
-        const data = await getAllReportsModel(userEmail);
+        const data = await getAllReportsModel(userEmail, emailProductor);
         // console.log("<================ Reportes (todos): ================>", data)
         return res.status(200).json({
             ok: true,
