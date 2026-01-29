@@ -13,7 +13,7 @@ router.get('/dashboard/:id', [verifyTokenMiddleware, getFullUserDataMiddleware, 
 router.get('/parcel/:id', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["director"])], getParcelByIDController)
 
 //REPORTES
-router.get('/reports/getAll/:email', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["director"]), validateUserEmail], getAllReportsController)
+router.get('/reports/getAll/:emailProductor', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["director"])], getAllReportsController)
 
 router.get('/reports/getByID/:idReport', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["director"])], getReportByIDController)
 

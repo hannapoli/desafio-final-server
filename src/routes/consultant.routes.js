@@ -7,7 +7,7 @@ const { getFullUserDataMiddleware } = require("../middlewares/user.data.middlewa
 const { validateRole } = require("../middlewares/roles.middleware");
 
 //DASHBOARD //El asesor proporciona el email del productor para ver sus tierras
-router.get('/dashboard/:email', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["asesor"])], getAllParcelsController)
+router.get('/dashboard/:email', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["asesor", "director"])], getAllParcelsController)
 router.get('/producers/:id', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["asesor"])], getAllProducersController)
 
 router.get('/parcel/:id', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["asesor"])], getParcelByIDController)

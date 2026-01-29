@@ -1,10 +1,12 @@
 const directorQueries = {
-    getAllParcels: `SELECT p.* 
+    getAllParcels: `SELECT * 
         FROM parcels AS p INNER JOIN director_producer AS dp ON p.uid_producer = dp.uid_producer 
+        INNER JOIN users as u ON u.firebase_uid_user = p.uid_producer
+        INNER JOIN cultivos as c ON c.id_cultivo = p.id_cultivo
         WHERE dp.uid_director = $1 
         ORDER BY p.name_parcel;`,
     getParcelByID: `SELECT * FROM parcels WHERE uid_parcel = $1`,
-    getAllReports: `SELECT * FROM reports WHERE $1 = ANY(email_receiver);`,
+    getAllReports: `SELECT * FROM reports WHERE email_creator = $2 AND $1 = ANY(email_receiver) ORDER BY created_at DESC;`,
     getReportByID: `SELECT * FROM reports WHERE uid_report = $1`,
     getReportByID: `SELECT * FROM reports WHERE uid_report = $1`,
     getAllConsultant: `SELECT * FROM users WHERE uid_rol = 'f4409e7e-ec44-4f3b-86a6-a3692a81a7e1';`,
