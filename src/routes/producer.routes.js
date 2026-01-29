@@ -47,7 +47,6 @@ router.post('/reports/create/:email/:idParcel', [
     verifyTokenMiddleware,
     getFullUserDataMiddleware,
     validateRole(["productor"]),
-    validateUserEmail,
     upload.array("attached", 10),
     check('email_receiver')
         .isEmail().withMessage("Escriba un email válido").bail()
