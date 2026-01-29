@@ -54,11 +54,10 @@ const queriesAdminUsers = {
             OR email_creator IN (SELECT email_user FROM user_email)
             OR (SELECT email_user FROM user_email) = ANY(email_receiver)
         ),
-        delete_parcels AS (
-            DELETE FROM parcels WHERE uid_producer = $1
-        ),
-        delete_director_producer AS (
-            DELETE FROM director_producer WHERE uid_director = $1 OR uid_producer = $1
+        delete_messages AS (
+            DELETE FROM messages 
+            WHERE email_creator IN (SELECT email_user FROM user_email) 
+            OR email_receiver IN (SELECT email_user FROM user_email)
         ),
         delete_mensaje AS (
             DELETE FROM mensaje WHERE conversacion_id IN (
@@ -68,10 +67,14 @@ const queriesAdminUsers = {
         delete_conversacion AS (
             DELETE FROM conversacion WHERE firebase_uid_user = $1
         ),
-        delete_messages AS (
-            DELETE FROM messages 
-            WHERE email_creator IN (SELECT email_user FROM user_email) 
-            OR email_receiver IN (SELECT email_user FROM user_email)
+        delete_parcels AS (
+            DELETE FROM parcels WHERE uid_producer = $1
+        ),
+        delete_director_producer AS (
+            DELETE FROM director_producer WHERE uid_director = $1 OR uid_producer = $1
+        ),
+        delete_producer_consultant AS (
+            DELETE FROM producer_consultant WHERE uid_producer = $1 OR uid_consultant = $1
         )
         DELETE FROM users
         WHERE firebase_uid_user = $1 

@@ -81,7 +81,15 @@ const deleteUserByUidController = async (req, res) => {
     const { id } = req.params;
     try {
         // Eliminamos el usuario de Firebase Authentication
-        await admin.auth().deleteUser(id);
+        try {
+            await admin.auth().deleteUser(id);
+        } catch (firebaseError) {
+            // Si el usuario no existe en Firebase, continuamos con la eliminación de la BD
+            if (firebaseError.code !== 'auth/user-not-found') {
+                console.error('Error al eliminar de Firebase:', firebaseError);
+                throw firebaseError;
+            }
+        }
 
         // Eliminamos el usuario de PostgreSQL
         const deletedUser = await removeUserByUidModel(id);
