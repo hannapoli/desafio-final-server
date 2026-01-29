@@ -82,6 +82,6 @@ router.delete('/reports/delete/:idReport', [
 router.get('/reports/download/:idReport', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor", "director", "asesor"])], downloadReportPDF );
 
 // INFORMACIÓN CULTIVOS
-router.get('/parcel/data/:id', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor"])], getInfoParcelData );
+router.get('/parcel/data/:id', [verifyTokenMiddleware, getFullUserDataMiddleware, validateRole(["productor", "director", "asesor"])], getInfoParcelData );
 
 module.exports = router;

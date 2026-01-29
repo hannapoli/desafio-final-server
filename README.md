@@ -37,10 +37,14 @@ CLOUDINARY_CLOUD_NAME=...
 Ejecuta el script SQL incluido para crear la estructura de tablas:
 ```language
 # Usa tu herramienta SQL preferida (pgAdmin, DBeaver) para ejecutar:
-/tables.sql
+tables.sql
+# Opción A: Desde terminal
+psql -U tu_usuario -d agrosync -f tables.sql
+
+# Opción B: Copia el contenido de 'tables.sql' en tu gestor (pgAdmin, DBeaver)
 ```
 
-#### 4️_ Arrancar el servidor
+#### 4️º - Arrancar el servidor
 
 ```language
 npm run dev
@@ -109,6 +113,24 @@ Subida de imágenes a Cloudinary:
 Recuperar historial de mensajes:
 - GET - /getChat/:email
 
+###  Detalle de las Variables de Entorno (.env)
+
+Para que el backend funcione correctamente, debes configurar las siguientes claves en tu archivo `.env`. Puedes obtenerlas en sus respectivas plataformas:
+
+| Variable | Descripción | Origen |
+| :--- | :--- | :--- |
+| `PORT` | Puerto local donde se ejecutará el servidor. | Definido por el usuario (ej. 4000) |
+| `DATABASE_URL` | String de conexión: `postgresql://usuario:password@host:puerto/nombre_db` | [PostgreSQL Local](https://www.postgresql.org) o servicio en la nube |
+| `FIREBASE_SERVICE_ACCOUNT` | El contenido completo (minificado) del JSON de tu cuenta de servicio. | [Firebase Console](https://console.firebase.google.com) > Configuración > Cuentas de servicio |
+| `CLOUDINARY_CLOUD_NAME` | Nombre de tu "Cloud" en el panel principal. | [Cloudinary Dashboard](https://cloudinary.com) |
+| `CLOUDINARY_API_KEY` | Clave de API para autenticar subidas. | [Cloudinary Dashboard](https://cloudinary.com) |
+| `CLOUDINARY_API_SECRET` | Firma secreta (no compartir). | [Cloudinary Dashboard](https://cloudinary.com) |
+
+> **Nota:** Asegúrate de que el archivo `.env` esté incluido en tu `.gitignore` para no exponer credenciales sensibles en el repositorio público.
+
+⚠️ **Importante:** Para la variable FIREBASE_SERVICE_ACCOUNT, utiliza una versión "minificada" del JSON (sin saltos de línea) para evitar errores de lectura.
+
+
 
 ### Tecnologías
 - Core: **Node.js, Express**
@@ -116,6 +138,3 @@ Recuperar historial de mensajes:
 - Security: **Firebase Admin SDK, CORS**
 - Real-time: **Socket.io**
 - Templates & Docs: **EJS, Swagger**
-
-
-
